@@ -337,14 +337,14 @@ class ModalForm extends React.PureComponent {
                   >
                     {keyValue
                       ? item.options.map(d => (
-                          <Option key={d[keyValue[1]]} value={d[keyValue[1]]}>
-                            {d[keyValue[0]]}
-                          </Option>
+                        <Option key={d[keyValue[1]]} value={d[keyValue[1]]}>
+                          {d[keyValue[0]]}
+                        </Option>
                         ))
                       : item.options.map(d => (
-                          <Option key={d.value} value={d.value}>
-                            {d.label}
-                          </Option>
+                        <Option key={d.value} value={d.value}>
+                          {d.label}
+                        </Option>
                         ))}
                   </Select>
                 )}
