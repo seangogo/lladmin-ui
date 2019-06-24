@@ -267,4 +267,5 @@ class Pie extends Component {
     );
   }
 }
+
 export default Pie;

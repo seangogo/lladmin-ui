@@ -121,9 +121,7 @@ class user extends PureComponent {
     dispatch({
       type: 'user/checkedUserName',
       payload: value,
-      callback: data => {
-        return data ? callback() : callback('账户名已存在');
-      },
+      callback: data => (data ? callback() : callback('账户名已存在')),
     });
   };
 
@@ -294,9 +292,11 @@ class user extends PureComponent {
       </Form>
     );
   }
+
   renderForm() {
     return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
+
   render() {
     const {
       loading,
@@ -391,24 +391,20 @@ class user extends PureComponent {
       {
         title: '登陆账号',
         dataIndex: 'username',
-        render: text => {
-          return (
-            <Ellipsis length={12} tooltip>
-              {text}
-            </Ellipsis>
-          );
-        },
+        render: text => (
+          <Ellipsis length={12} tooltip>
+            {text}
+          </Ellipsis>
+        ),
       },
       {
         title: '真实姓名',
         dataIndex: 'realName',
-        render: text => {
-          return (
-            <Ellipsis length={12} tooltip>
-              {text}
-            </Ellipsis>
-          );
-        },
+        render: text => (
+          <Ellipsis length={12} tooltip>
+            {text}
+          </Ellipsis>
+        ),
       },
       {
         title: '账户状态',
@@ -566,4 +562,5 @@ class user extends PureComponent {
     );
   }
 }
+
 export default user;

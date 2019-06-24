@@ -92,7 +92,7 @@ class org extends React.PureComponent {
     dispatch({
       type: 'org/checkCode',
       payload: value,
-      callback: data => data ? callback() : callback('编码已存在'),
+      callback: data => (data ? callback() : callback('编码已存在')),
     });
   };
 
@@ -156,18 +156,18 @@ class org extends React.PureComponent {
           <Menu
             style={{ marginLeft: 70 }}
             onClick={a => {
-                if (a.key === 'delete') {
-                  if (this.state.formData.id === data.id) {
-                    this.setState({ formData: {} });
-                  }
-                  return;
+              if (a.key === 'delete') {
+                if (this.state.formData.id === data.id) {
+                  this.setState({ formData: {} });
                 }
-                this.setState({ formData: data });
-                if (a.key === 'look') {
-                  return;
-                }
-                this.setState({ visible: true });
-              }}
+                return;
+              }
+              this.setState({ formData: data });
+              if (a.key === 'look') {
+                return;
+              }
+              this.setState({ visible: true });
+            }}
           >
             <Menu.Item key="edit">
               <Icon type="edit" /> 编辑
@@ -177,11 +177,11 @@ class org extends React.PureComponent {
               <Popconfirm
                 title="是否确认移除此组织？"
                 onConfirm={() =>
-                    this.props.dispatch({
-                      type: 'org/remove',
-                      payload: data.id,
-                    })
-                  }
+                  this.props.dispatch({
+                    type: 'org/remove',
+                    payload: data.id,
+                  })
+                }
               >
                 <Icon type="delete" /> 删除
               </Popconfirm>
@@ -191,13 +191,13 @@ class org extends React.PureComponent {
               <Icon type="eye-o" /> 查看
             </Menu.Item>
           </Menu>
-          }
+        }
         trigger={['contextMenu']}
         placement="bottomCenter"
       >
         <span style={{ fontSize: 16 }}>{data.name}</span>
       </Dropdown>
-      );
+    );
     const loop = data =>
       data.map(item => {
         if (item.children) {

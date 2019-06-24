@@ -14,10 +14,12 @@ export default class log extends PureComponent {
     formValues: {},
     filterNameVisible: false,
   };
+
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({ type: 'base/fetch', payload: { url: '/log/list' } });
   }
+
   onInputChange = e => {
     const obj = {};
     obj[e.target.id] = e.target.value;
@@ -41,6 +43,7 @@ export default class log extends PureComponent {
       dispatch({ type: 'base/fetch', payload: { url: '/log/list' } });
     });
   };
+
   render() {
     const {
       loading,

@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 export interface IPageHeaderProps {
   title?: React.ReactNode | string;
   logo?: React.ReactNode | string;
@@ -19,4 +20,5 @@ export interface IPageHeaderProps {
   wide?: boolean;
 }
 
-export default class PageHeader extends React.Component<IPageHeaderProps, any> {}
+export default class PageHeader extends React.Component<IPageHeaderProps, any> {
+}

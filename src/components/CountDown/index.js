@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
 }
+
 const initTime = props => {
   let lastTime = 0;
   let targetTime = 0;

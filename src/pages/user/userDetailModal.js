@@ -8,12 +8,14 @@ export default class userDetailModal extends React.PureComponent {
   state = {
     detailModelData: {},
   };
+
   componentWillReceiveProps(nextProps) {
     const { detailModelData } = nextProps;
     if (detailModelData.id !== this.state.detailModelData.id) {
       this.setState({ detailModelData });
     }
   }
+
   render() {
     const { changeVisible, detailModelData } = this.props;
     const colors = [

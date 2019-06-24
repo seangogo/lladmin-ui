@@ -179,6 +179,7 @@ export function formatWan(val) {
   }
   return result;
 }
+
 export function dynamicRoute(nodeList, parentPath = '') {
   const arr = [];
   nodeList.forEach(node => {

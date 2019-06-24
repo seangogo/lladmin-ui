@@ -48,4 +48,5 @@ class MiniBar extends React.Component {
     );
   }
 }
+
 export default MiniBar;

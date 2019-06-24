@@ -21,7 +21,7 @@ const codeMessage = {
   504: '网关超时',
 };
 const config = {
-  'localhost:8000': 'http://www.seangogo.cn/auth',
+  'localhost:8000': 'http://localhost:8080/auth',
   'fota-ui.paas.pateo.com.cn': 'http://bxuigw.paas.pateo.com.cn/fota-auth',
   'fota-ui.perf.pateo.com.cn': 'http://bxuigw-bdperf.pateo.com.cn/fota-auth/auth',
   'fota-ui.uat.pateo.com.cn': 'https://optgw-uat.pateo.com.cn/fota-auth/auth',
@@ -62,6 +62,7 @@ const urls = {
 
 function checkStatus(response) {
   // 小于10分钟或者
+  console.log(response);
   if (response.status === 401) {
     // const { dispatch } = store;
     // if (isLogin() && getExpires() < 1800 && getExpires() > 0) {

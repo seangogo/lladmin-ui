@@ -398,4 +398,5 @@ class resource extends PureComponent {
     );
   }
 }
+
 export default resource;

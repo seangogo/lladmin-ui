@@ -100,7 +100,7 @@ export async function fakeAccountLogin(params) {
   const formData = new FormData();
   formData.append('username', params.userName);
   formData.append('password', Buffer.from(params.password).toString('base64'));
-  return request('/authentication/form', {
+  return request('/login', {
     headers: { Authorization: 'Basic dGVzdDp0ZXN0' },
     method: 'POST',
     body: formData,

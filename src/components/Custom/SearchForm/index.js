@@ -6,6 +6,7 @@ import styles from './index.less';
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
 const { Option } = Select;
+
 @Form.create()
 class SearchForm extends PureComponent {
   state = {
