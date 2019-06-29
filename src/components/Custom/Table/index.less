@@ -1,0 +1,40 @@
+@import '~antd/lib/style/themes/default.less';
+
+.standardTable {
+  :global {
+    .ant-table-pagination {
+      margin-top: 24px;
+    }
+  }
+  .custom-filter-dropdown {
+    padding: 8px;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .custom-filter-dropdown input {
+    width: 130px;
+    margin-right: 8px;
+  }
+
+  .highlight {
+    color: #f50;
+  }
+  .tableAlert {
+    margin-bottom: 16px;
+  }
+
+  .splitLine {
+    background: @border-color-split;
+    display: inline-block;
+    margin: 0 8px;
+    width: 1px;
+    height: 12px;
+  }
+
+  .delete-row-operations {
+    margin-left: 30px;
+    background-color: red;
+  }
+}
