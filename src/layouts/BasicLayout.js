@@ -23,6 +23,7 @@ import Context from './MenuContext';
 import { E403, E404, E500 } from '../pages/Exception';
 import { dynamicRoute, dynamicModels } from '../utils/utils';
 import { isLogin, storageClear } from '../utils/helper';
+import { getToken } from '@/utils/auth';
 
 const { Content } = Layout;
 
@@ -98,7 +99,7 @@ class BasicLayout extends React.PureComponent {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    if (isLogin()) {
+    if (getToken()) {
       dispatch({ type: 'login/fetchCurrent' });
     } else {
       dispatch(routerRedux.push('/guest/login'));
@@ -126,21 +127,21 @@ class BasicLayout extends React.PureComponent {
     // 切换到手机模式后,如果折叠为true，则需要单击两次才能显示
     this.breadcrumbNameMap = this.getBreadcrumbNameMap();
     const { isMobile } = this.state;
-    const { currentUser, dispatch } = preProps;
+    const { user, dispatch } = preProps;
     const {
       collapsed,
-      currentUser: { authInfo },
+      user: { menuInfo },
     } = this.props;
-    console.log(authInfo);
+    console.log(menuInfo);
     if (isMobile && !preProps.isMobile && !collapsed) {
       this.handleMenuCollapse(false);
     }
-    if (!isLogin()) {
+    if (!getToken()) {
       dispatch(routerRedux.push('/guest/login'));
       storageClear();
     }
-    if (authInfo && currentUser.authInfo !== authInfo) {
-      dynamicModels(authInfo.children);
+    if (menuInfo && user.menuInfo !== menuInfo) {
+      dynamicModels(menuInfo.children);
     }
   }
 
@@ -159,8 +160,8 @@ class BasicLayout extends React.PureComponent {
 
   getMenuData() {
     const {
-      currentUser: {
-        authInfo: { children },
+      user: {
+        menuInfo: { children },
       },
     } = this.props;
     return formatter(children);
@@ -243,8 +244,8 @@ class BasicLayout extends React.PureComponent {
       loading,
       navTheme,
       layout: PropsLayout,
-      currentUser: {
-        authInfo: { children },
+      user: {
+        menuInfo: { children },
       },
       location: { pathname },
     } = this.props;
@@ -311,7 +312,7 @@ class BasicLayout extends React.PureComponent {
 }
 
 export default connect(({ loading, global, setting, login }) => ({
-  currentUser: login.currentUser,
+  user: login.user,
   collapsed: global.collapsed,
   layout: setting.layout,
   loading: loading.models.login,

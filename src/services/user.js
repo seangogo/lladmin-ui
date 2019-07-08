@@ -1,9 +1,6 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
-export function queryCurrent() {
-  return request('/user/info');
-}
 export async function query(params) {
   return request(`/user/list?${stringify(params)}`, {
     method: 'GET',

@@ -1,44 +1,41 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 import { stringify } from 'qs';
-import { login, queryCurrent, logout } from '../services/login';
+import { getCaptcha, login, queryCurrent, logout } from '../services/login';
 import { putToken, getRefreshToken, storageClear } from '../utils/helper';
-import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
-import { reloadAuthorized } from '@/utils/Authorized';
+import { setToken, removeToken } from '@/utils/auth';
 
 export default {
   namespace: 'login',
-
   state: {
+    captcha: {},
     status: undefined,
-    currentUser: {
-      authLoading: false,
-      realName: '',
+    user: {
       userName: '',
-      imgUrl: '',
-      buttons: [],
-      firstLogin: false,
-      authInfo: {
+      avatar: '',
+      menuInfo: {
         children: [],
       },
-      dic: {},
-      projectCodes: [],
-      brandCodes: [],
+      buttons: [],
     },
   },
 
   effects: {
+    // 获取验证码
+    *getCaptcha({ payload }, { call, put }) {
+      const response = yield call(getCaptcha, payload);
+      yield put({
+        type: 'save',
+        payload: { captcha: response },
+      });
+    },
     // 登陆
     *login({ payload }, { call, put }) {
-      const response = yield call(login, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
+      const { token } = yield call(login, payload);
       // Login successfully
-      if (response.token) {
-        reloadAuthorized();
+      if (token) {
+        setToken(token, false); // todo 记住密码后期完善
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
@@ -60,15 +57,16 @@ export default {
     // 获取登陆用户信息
     *fetchCurrent({ _ }, { call, put }) {
       const response = yield call(queryCurrent);
+      console.log(response);
       yield put({
         type: 'save',
-        payload: { currentUser: response.data },
+        payload: { user: response },
       });
     },
 
     *logout(_, { call, put }) {
       const response = yield call(logout);
-      storageClear(); // todo 完善
+      removeToken();
       yield put({
         type: 'changeLoginStatus',
         payload: {
@@ -76,7 +74,6 @@ export default {
           currentAuthority: 'guest',
         },
       });
-      reloadAuthorized();
       yield put(
         routerRedux.push({
           pathname: '/guest/login',
@@ -115,21 +112,5 @@ export default {
         type: payload.type,
       };
     },
-    // currentSave(state, action) {
-    //   const { currentUser } = state;
-    //   const current = { ...currentUser, ...action.payload };
-    //   return {
-    //     ...state,
-    //     ...{ currentUser: current },
-    //   };
-    // }, // todo 测试通过删除
-    // changeLoginStatus(state, { payload }) {
-    //   setAuthority(payload.currentAuthority);
-    //   return {
-    //     ...state,
-    //     status: payload.status,
-    //     type: payload.type,
-    //   };
-    // },
   },
 };

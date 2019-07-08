@@ -1,7 +1,8 @@
 import fetch from 'dva/fetch';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
-import { isLogin, getToken, getExpires } from './helper';
+import { getExpires } from './helper';
+import { getToken } from '@/utils/auth';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据',
@@ -21,7 +22,7 @@ const codeMessage = {
   504: '网关超时',
 };
 const config = {
-  'localhost:8000': 'http://localhost:8080/auth',
+  'localhost:8000': 'http://localhost:8080',
   'fota-ui.paas.pateo.com.cn': 'http://bxuigw.paas.pateo.com.cn/fota-auth',
   'fota-ui.perf.pateo.com.cn': 'http://bxuigw-bdperf.pateo.com.cn/fota-auth/auth',
   'fota-ui.uat.pateo.com.cn': 'https://optgw-uat.pateo.com.cn/fota-auth/auth',
@@ -61,6 +62,7 @@ const urls = {
 };
 
 function checkStatus(response) {
+  console.log('checkStatus');
   // 小于10分钟或者
   if (response.status === 401) {
     // const { dispatch } = store;
@@ -87,8 +89,8 @@ function checkStatus(response) {
 
 export default function request(url, options) {
   const newOptions = { ...options };
-  if (isLogin() && url.indexOf('http') !== 0) {
-    newOptions.headers = { Authorization: `bearer ${getToken()}` };
+  if (getToken() && url.indexOf('http') !== 0) {
+    newOptions.headers = { Authorization: `Bearer ${getToken()}` };
   }
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     if (!(newOptions.body instanceof FormData)) {
@@ -119,9 +121,20 @@ export default function request(url, options) {
       }
       const json = response.json();
       if (response.status === 300) {
-        json.then(warningResponse => {
-          message.warning(warningResponse.message);
+        json.then(e => {
+          message.warning(e.message);
         });
+      }
+
+      return json;
+    })
+    .then(json => {
+      const { statusCode, statusMessage, data } = json;
+      if (statusCode && statusMessage) {
+        if (json.statusCode && json.statusCode === '0') {
+          return data;
+        }
+        message.warning(json.statusMessage);
       }
       return json;
     });

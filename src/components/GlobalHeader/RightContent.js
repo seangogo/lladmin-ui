@@ -50,7 +50,7 @@ export default class GlobalHeaderRight extends PureComponent {
 
   render() {
     const {
-      currentUser,
+      user,
       fetchingNotices,
       onNoticeVisibleChange,
       onMenuClick,
@@ -109,7 +109,7 @@ export default class GlobalHeaderRight extends PureComponent {
         </Tooltip>
         <NoticeIcon
           className={styles.action}
-          count={currentUser.notifyCount}
+          count={user.notifyCount}
           onItemClick={(item, tabProps) => {
             console.log(item, tabProps); // eslint-disable-line
           }}
@@ -137,16 +137,11 @@ export default class GlobalHeaderRight extends PureComponent {
             emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
           />
         </NoticeIcon>
-        {currentUser.realName ? (
+        {user.username ? (
           <Dropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
-              <Avatar
-                size="small"
-                className={styles.avatar}
-                src={currentUser.imgUrl}
-                alt="avatar"
-              />
-              <span className={styles.name}>{currentUser.realName}</span>
+              <Avatar size="small" className={styles.avatar} src={user.avatar} alt="avatar" />
+              <span className={styles.name}>{user.username}</span>
             </span>
           </Dropdown>
         ) : (

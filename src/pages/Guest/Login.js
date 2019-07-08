@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import Link from 'umi/link';
-import { Checkbox, Alert, Icon } from 'antd';
+import { Checkbox, Alert, Icon, Row, Col } from 'antd';
 import Login from '@/components/Login';
 import { remember, isLogin, storageClear } from '../../utils/helper';
 import styles from './Login.less';
@@ -24,6 +24,7 @@ class LoginPage extends Component {
     if (isLogin()) {
       this.props.dispatch(routerRedux.push('/home'));
     } else {
+      this.onGetCaptcha();
       storageClear();
     }
   }
@@ -34,28 +35,23 @@ class LoginPage extends Component {
 
   onGetCaptcha = () =>
     new Promise((resolve, reject) => {
-      this.loginForm.validateFields(['mobile'], {}, (err, values) => {
-        if (err) {
-          reject(err);
-        } else {
-          const { dispatch } = this.props;
-          dispatch({
-            type: 'login/getCaptcha',
-            payload: values.mobile,
-          })
-            .then(resolve)
-            .catch(reject);
-        }
-      });
+      const { dispatch } = this.props;
+      dispatch({ type: 'login/getCaptcha' })
+        .then(resolve)
+        .catch(reject);
     });
 
   handleSubmit = (err, values) => {
     const { type } = this.state;
     if (!err) {
-      const { dispatch } = this.props;
+      const {
+        dispatch,
+        login: { captcha },
+      } = this.props;
       dispatch({
         type: 'login/login',
         payload: {
+          ...{ uuid: captcha.uuid },
           ...values,
           type,
         },
@@ -75,6 +71,7 @@ class LoginPage extends Component {
 
   render() {
     const { login, submitting } = this.props;
+    const { captcha } = login;
     const { type, autoLogin } = this.state;
     return (
       <div className={styles.main}>
@@ -106,6 +103,16 @@ class LoginPage extends Component {
             <Mobile name="mobile" />
             <Captcha name="captcha" countDown={120} onGetCaptcha={this.onGetCaptcha} />
           </Tab>
+          <Row gutter={16}>
+            <Col span={14}>
+              <UserName name="code" placeholder="请输入验证码" />
+            </Col>
+            <Col span={10}>
+              {captcha.img && (
+                <img src={`data:image/gif;base64,${captcha.img}`} onClick={this.onGetCaptcha} />
+              )}
+            </Col>
+          </Row>
           <div>
             <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
               自动登录
