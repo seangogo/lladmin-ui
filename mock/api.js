@@ -328,5 +328,4 @@ export default {
   }),
   'GET /api/fake_list': getFakeList,
   'POST /api/fake_list': postFakeList,
-  'GET /api/captcha': getFakeCaptcha,
 };

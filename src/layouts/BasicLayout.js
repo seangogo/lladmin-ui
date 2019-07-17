@@ -16,7 +16,7 @@ import { Switch, Route } from 'react-router-dom';
 import Home from '../pages/home';
 import Info from '../pages/Account/Settings/BaseView';
 import Center from '../pages/Account/Center/Center';
-import logo from '../assets/logo.svg';
+import logo from '../assets/logo.png';
 import Footer from './Footer';
 import Header from './Header';
 import Context from './MenuContext';

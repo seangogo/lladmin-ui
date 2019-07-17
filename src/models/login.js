@@ -1,10 +1,7 @@
 import { routerRedux } from 'dva/router';
-import { message } from 'antd';
-import { stringify } from 'qs';
-import { getCaptcha, login, queryCurrent, logout } from '../services/login';
-import { putToken, getRefreshToken, storageClear } from '../utils/helper';
+import { getCaptcha, login, queryCurrent } from '../services/login';
 import { getPageQuery } from '@/utils/utils';
-import { setToken, removeToken } from '@/utils/auth';
+import { setToken } from '@/utils/auth';
 
 export default {
   namespace: 'login',
@@ -63,26 +60,6 @@ export default {
         payload: { user: response },
       });
     },
-
-    *logout(_, { call, put }) {
-      const response = yield call(logout);
-      removeToken();
-      yield put({
-        type: 'changeLoginStatus',
-        payload: {
-          status: false,
-          currentAuthority: 'guest',
-        },
-      });
-      yield put(
-        routerRedux.push({
-          pathname: '/guest/login',
-          search: stringify({
-            redirect: window.location.href,
-          }),
-        })
-      );
-    },
   },
 
   reducers: {
@@ -90,26 +67,6 @@ export default {
       return {
         ...state,
         ...action.payload,
-      };
-    },
-    changeLoginStatus(state, { payload }) {
-      const { token, msg } = payload;
-      const msgArr = {
-        UsernameNotFoundException: '账户不存在',
-        CredentialsExpiredException: '账户已过期，请重新找回密码',
-        AccountExpiredException: '账户未激活,请先激活',
-        LockedException: '账户已锁定,请联系管理员',
-      };
-      if (token) {
-        putToken(token);
-      }
-      if (msg) {
-        message.warning(msgArr[msg] || msg);
-      }
-      return {
-        ...state,
-        status: payload.status,
-        type: payload.type,
       };
     },
   },

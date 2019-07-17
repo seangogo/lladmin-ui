@@ -7,6 +7,7 @@ import GlobalHeader from '@/components/GlobalHeader';
 import TopNavHeader from '@/components/TopNavHeader';
 import styles from './Header.less';
 import Authorized from '@/utils/Authorized';
+import { removeToken } from '@/utils/auth';
 
 const { Header } = Layout;
 
@@ -51,7 +52,6 @@ class HeaderView extends PureComponent {
   };
 
   handleMenuClick = ({ key }) => {
-    const { dispatch } = this.props;
     if (key === 'userCenter') {
       router.push('/userCenter');
       return;
@@ -61,9 +61,8 @@ class HeaderView extends PureComponent {
       return;
     }
     if (key === 'logout') {
-      dispatch({
-        type: 'login/logout',
-      });
+      removeToken();
+      router.push('/guest/login');
     }
   };
 

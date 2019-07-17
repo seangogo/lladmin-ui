@@ -22,9 +22,3 @@ export async function login(params) {
 export function queryCurrent() {
   return request('/user/info');
 }
-
-export async function logout() {
-  return request('/user/logout', {
-    method: 'GET',
-  });
-}
