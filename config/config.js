@@ -22,7 +22,6 @@ export default {
         dynamicImport: {
           loadingComponent: './components/PageLoading/index',
         },
-        polyfills: ['ie11'],
         // hd: true, 高清方案
         // fastClick: true, 移动设备有效
         ...(!process.env.TEST && os.platform() === 'darwin'
@@ -77,7 +76,7 @@ export default {
     },
   },
   manifest: {
-    name: 'Operation-Management-Platform',
+    name: 'lladmin',
     background_color: '#FFF',
     description: '企业应用程序的一种现成的UI解决方案。',
     display: 'standalone',
@@ -86,13 +85,17 @@ export default {
       {
         src: '/favicon.icon',
         sizes: '48x48',
-        type: 'image/png',
+        type: 'image/icon',
       },
     ],
   },
   outputPath: '../boot-backend/src/main/resources',
   chainWebpack: webpackplugin,
+
   cssnano: {
     mergeRules: false,
+  },
+  targets: {
+    ie: 11,
   },
 };

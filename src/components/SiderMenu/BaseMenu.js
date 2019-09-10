@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Menu, Icon } from 'antd';
+import { Menu } from 'antd';
 import Link from 'umi/link';
 import { formatMessage } from 'umi/locale';
 import pathToRegexp from 'path-to-regexp';
@@ -88,7 +88,7 @@ export default class BaseMenu extends PureComponent {
             item.icon ? (
               <span>
                 {getIcon(item.icon)}
-                <span>{item.name}</span>
+                <span style={{ verticalAlign: "middle" }}>{item.name}</span>
               </span>
             ) : (
               item.name

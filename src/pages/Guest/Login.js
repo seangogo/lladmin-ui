@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import Link from 'umi/link';
 import { Form, Checkbox, Alert, Icon, Row, Col, Input, Button } from 'antd';
-import { remember, isLogin, storageClear } from '../../utils/helper';
+import { getToken, removeToken } from '@/utils/auth';
 import styles from './Login.less';
 
 const FormItem = Form.Item;
@@ -19,13 +19,13 @@ class LoginPage extends Component {
     autoLogin: true,
   };
 
-  /* 组件初始化时只调用，以后组件更新不调用，整个生命周期只调用一次，此时可以修改state */
   componentWillMount() {
-    if (isLogin()) {
+    console.log('componentWillMount');
+    if (getToken()) {
       this.props.dispatch(routerRedux.replace('/home'));
     } else {
       this.onGetCaptcha();
-      storageClear();
+      removeToken();
     }
   }
 
@@ -37,23 +37,23 @@ class LoginPage extends Component {
         .catch(reject);
     });
 
-  handleSubmit = (err, values) => {
-    console.log('handleSubmit');
-    console.log(err)
-    console.log(values);
-    if (!err) {
-      const {
-        dispatch,
-        login: { captcha },
-      } = this.props;
-      dispatch({
-        type: 'login/login',
-        payload: {
-          ...{ uuid: captcha.uuid },
-          ...values,
-        },
-      });
-    }
+  handleSubmit = () => {
+    const { form } = this.props;
+    form.validateFields({ force: true }, (err, values) => {
+      if (!err) {
+        const {
+          dispatch,
+          login: { captcha },
+        } = this.props;
+        dispatch({
+          type: 'login/login',
+          payload: {
+            ...{ uuid: captcha.uuid },
+            ...values,
+          },
+        });
+      }
+    });
   };
 
   changeAutoLogin = e => {
@@ -79,12 +79,15 @@ class LoginPage extends Component {
         <h3 className={styles.title} style={{ fontSize: 14 }}>
           ll-admin 后台管理员平台
         </h3>
-        <Form onSubmit={this.handleSubmit} className={styles.form}>
+        <Form className={styles.form}>
           <FormItem>
             {getFieldDecorator('username', {
-              rules: [{
-                required: true, message: '请输入账户名！',
-              }],
+              rules: [
+                {
+                  required: true,
+                  message: '请输入账户名！',
+                },
+              ],
             })(
               <Input
                 prefix={<Icon type="user" className={styles.prefixIcon} />}
@@ -95,9 +98,12 @@ class LoginPage extends Component {
           </FormItem>
           <FormItem>
             {getFieldDecorator('password', {
-              rules: [{
-                required: true, message: '请输入密码！',
-              }],
+              rules: [
+                {
+                  required: true,
+                  message: '请输入密码！',
+                },
+              ],
             })(
               <Input
                 prefix={<Icon type="key" className={styles.prefixIcon} />}
@@ -117,9 +123,12 @@ class LoginPage extends Component {
           </FormItem>
           <FormItem>
             {getFieldDecorator('code', {
-              rules: [{
-                required: true, message: '请输入验证码！',
-              }],
+              rules: [
+                {
+                  required: true,
+                  message: '请输入验证码！',
+                },
+              ],
             })(
               <Input
                 prefix={<Icon type="key" className={styles.prefixIcon} />}
@@ -135,7 +144,8 @@ class LoginPage extends Component {
                 src={`data:image/gif;base64,${captcha.img}`}
                 alt=""
                 onClick={this.onGetCaptcha}
-              />)}
+              />
+            )}
           </FormItem>
           <FormItem className={styles.additional}>
             <div>
@@ -154,6 +164,7 @@ class LoginPage extends Component {
               className={styles.submit}
               type="primary"
               htmlType="submit"
+              onClick={this.handleSubmit}
             >
               登录
             </Button>

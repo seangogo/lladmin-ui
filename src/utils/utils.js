@@ -213,13 +213,14 @@ export function dynamicModels(nodeList) {
     if (item.children.length > 0) {
       dynamicModels(item.children);
     } else {
+      console.log(item);
       try {
         window.g_app.model({
           namespace: item.path,
           ...require(`../pages/${item.path}/models/${item.path}.js`).default,
         });
       } catch (e) {
-        // console.log(err);
+        console.log(e);
       }
     }
   });
@@ -258,3 +259,16 @@ export const getResources = (tree, collection = []) => {
   }
   return collection;
 };
+
+export const getPagination = (pagination) => ({
+    showSizeChanger: true,
+    showQuickJumper: true,
+    ...pagination,
+    showTotal: () => (
+      <span>
+          共&nbsp;
+        {pagination === undefined ? 0 : pagination.total}
+        &nbsp;条
+      </span>
+    ),
+  });

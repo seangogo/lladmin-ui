@@ -1,5 +1,5 @@
 {
-  "name": "Operation-Management-Platform",
+  "name": "lladmin",
   "version": "2.0.0",
   "description": "An out-of-box UI solution for enterprise applications",
   "private": true,
@@ -24,6 +24,8 @@
   },
   "dependencies": {
     "@antv/data-set": "^0.9.5",
+    "@antv/g6": "3.0.0",
+    "@antv/g6-plugins": "^1.0.9",
     "@babel/runtime": "^7.0.0",
     "antd": "^3.9.1",
     "bizcharts": "^3.1.10",
@@ -84,7 +86,7 @@
     "stylelint": "^9.4.0",
     "stylelint-config-prettier": "^4.0.0",
     "stylelint-config-standard": "^18.0.0",
-    "umi": "^2.0.1",
+    "umi": "^2.2.4",
     "umi-plugin-react": "^1.0.1"
   },
   "optionalDependencies": {
@@ -107,3 +109,4 @@
     "not ie <= 10"
   ]
 }
+

@@ -19,12 +19,6 @@ const tagColors = [
   'red',
   'orange',
 ];
-const orgType = {
-  ROOT: '根组织',
-  PATEO: '项目组',
-  FIRM: '厂商',
-  DEALER: '经销商',
-};
 const getParentKey = (id, tree) => {
   let parentKey;
   for (let i = 0; i < tree.length; i++) {
@@ -42,13 +36,13 @@ const getParentKey = (id, tree) => {
   }
   return parentKey;
 };
-@connect(({ org, brand, project, loading }) => ({
-  org,
+@connect(({ dept, brand, project, loading }) => ({
+  dept,
   brand,
   project,
-  loading: loading.models.org,
+  loading: loading.models.dept,
 }))
-class org extends React.PureComponent {
+class dept extends React.PureComponent {
   state = {
     visible: false,
     formData: {},
@@ -57,16 +51,9 @@ class org extends React.PureComponent {
   };
 
   componentDidMount() {
-    const {
-      dispatch,
-      brand: { select },
-    } = this.props;
+    const { dispatch } = this.props;
     // 左边树形数据
-    dispatch({ type: 'org/fetchTree' });
-    // 品牌选项
-    if (select.length === 0) {
-      dispatch({ type: 'brand/labels' });
-    }
+    dispatch({ type: 'dept/fetch' });
   }
 
   onSelect = (selectedKeys, e) => {
@@ -90,7 +77,7 @@ class org extends React.PureComponent {
     }
     const { dispatch } = this.props;
     dispatch({
-      type: 'org/checkCode',
+      type: 'dept/checkCode',
       payload: value,
       callback: data => {
         return data ? callback() : callback('编码已存在');
@@ -181,7 +168,7 @@ class org extends React.PureComponent {
                   title="是否确认移除此组织？"
                   onConfirm={() =>
                     this.props.dispatch({
-                      type: 'org/remove',
+                      type: 'dept/remove',
                       payload: data.id,
                     })
                   }
@@ -303,10 +290,10 @@ class org extends React.PureComponent {
           addUrl="/org/add"
           dispatch={dispatch}
           selectArrList={['brandIds']}
-          callBackFetch={() => dispatch({ type: 'org/fetchTree' })}
+          callBackFetch={() => dispatch({ type: 'dept/fetchTree' })}
         />
       </Card>
     );
   }
 }
-export default org;
+export default dept;

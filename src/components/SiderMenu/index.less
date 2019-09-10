@@ -6,7 +6,7 @@
   height: @nav-header-height;
   position: relative;
   line-height: @nav-header-height;
-  padding-left: (@menu-collapsed-width - 32px) / 2;
+  padding-left: (@menu-collapsed-width - 44px) / 2;
   transition: all 0.3s;
   background: #002140;
   overflow: hidden;
@@ -14,6 +14,7 @@
     display: inline-block;
     vertical-align: middle;
     height: 32px;
+    width: 144px;
   }
   h1 {
     color: white;
@@ -85,11 +86,18 @@
     opacity: 1;
   }
   .ompIcon {
-    display: inline-block;
-    text-align: center;
     text-transform: none;
     line-height: 1;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    overflow: hidden;
+  }
+  /*add style*/
+  .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+    height: 56px;
+    line-height: 56px;
   }
 }

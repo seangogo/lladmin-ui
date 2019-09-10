@@ -169,7 +169,7 @@ class ModalForm extends React.PureComponent {
           initialValue,
           filterTreeNode,
         } = item;
-        const placeholder = `请填写${typeof title === 'string' ? title : ''}`;
+        const placeholder = item.placeholder || `请填写${typeof title === 'string' ? title : ''}`;
         const options = {};
         const dateFormat = 'YYYY-MM-DD HH:mm:ss';
         options.rules = [

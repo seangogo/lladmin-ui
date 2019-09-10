@@ -1,8 +1,7 @@
 import fetch from 'dva/fetch';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
-import { getExpires } from './helper';
-import { getToken } from '@/utils/auth';
+import { getToken, removeToken } from '@/utils/auth';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据',
@@ -62,20 +61,12 @@ const urls = {
 };
 
 function checkStatus(response) {
-  console.log('checkStatus');
-  // 小于10分钟或者
   if (response.status === 401) {
-    // const { dispatch } = store;
-    // if (isLogin() && getExpires() < 1800 && getExpires() > 0) {
-    //   dispatch({ type: 'login/refresh' });
-    // }
-    localStorage.clear();
-    sessionStorage.clear();
-    // dispatch({ type: 'login/changeLogin' });
-    // dispatch(routerRedux.push('/login'));
+    removeToken();
     response.json().then(() => {
       message.warning('登陆已失效，请重新登陆');
     });
+    routerRedux.push('/guest/login')
     return;
   }
   if (response.status >= 200 && response.status <= 300) {
@@ -134,7 +125,7 @@ export default function request(url, options) {
         if (json.statusCode && json.statusCode === '0') {
           return data;
         }
-        message.warning(json.statusMessage);
+        return message.warning(json.statusMessage);
       }
       return json;
     });

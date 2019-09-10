@@ -16,7 +16,7 @@ import { Switch, Route } from 'react-router-dom';
 import Home from '../pages/home';
 import Info from '../pages/Account/Settings/BaseView';
 import Center from '../pages/Account/Center/Center';
-import logo from '../assets/logo.png';
+import logo from '../assets/menu-logo.png';
 import Footer from './Footer';
 import Header from './Header';
 import Context from './MenuContext';
@@ -132,7 +132,6 @@ class BasicLayout extends React.PureComponent {
       collapsed,
       user: { menuInfo },
     } = this.props;
-    console.log(menuInfo);
     if (isMobile && !preProps.isMobile && !collapsed) {
       this.handleMenuCollapse(false);
     }

@@ -30,6 +30,7 @@ export default {
     // 登陆
     *login({ payload }, { call, put }) {
       const { token } = yield call(login, payload);
+      console.log('login/login');
       // Login successfully
       if (token) {
         setToken(token, false); // todo 记住密码后期完善
