@@ -39,6 +39,7 @@
     "lodash-decorators": "^6.0.0",
     "memoize-one": "^4.0.0",
     "moment": "^2.22.2",
+    "nprogress": "^0.2.0",
     "numeral": "^2.0.6",
     "nzh": "^1.0.3",
     "omit.js": "^1.0.0",
@@ -109,4 +110,3 @@
     "not ie <= 10"
   ]
 }
-

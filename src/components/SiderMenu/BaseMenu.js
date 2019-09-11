@@ -164,6 +164,7 @@ export default class BaseMenu extends PureComponent {
     if (!selectedKeys.length && openKeys) {
       selectedKeys = [openKeys[openKeys.length - 1]];
     }
+    console.log(openKeys);
     let props = {};
     if (openKeys) {
       props = {

@@ -131,7 +131,7 @@ class TextyLogo extends React.Component {
               delay={2200}
               interval={30}
             >
-              Operation Management Platform of Run Operations
+              lladmin
             </Texty>
           </div>
         )}

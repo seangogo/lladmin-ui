@@ -20,7 +20,7 @@ const getDefaultCollapsedSubMenus = props => {
   } = props;
   return urlToList(pathname)
     .map(item => getMenuMatches(flatMenuKeys, item)[0])
-    .filter(item => item);
+    .filter(item => item)
 };
 
 /**
@@ -60,7 +60,7 @@ export default class SiderMenu extends PureComponent {
 
   static getDerivedStateFromProps(props, state) {
     const { pathname } = state;
-    if (props.location.pathname !== pathname) {
+    if (props.location.pathname !== pathname || state.openKeys.length === 0) {
       return {
         pathname: props.location.pathname,
         openKeys: getDefaultCollapsedSubMenus(props),

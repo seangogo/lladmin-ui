@@ -7,12 +7,13 @@ import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
+import NProgress from 'nprogress';
 import pathToRegexp from 'path-to-regexp';
 import { enquireScreen, unenquireScreen } from 'enquire-js';
+import { Switch, Route } from 'react-router-dom';
 import { formatMessage } from 'umi/locale';
 import SiderMenu from '@/components/SiderMenu';
 import SettingDrawer from '@/components/SettingDrawer';
-import { Switch, Route } from 'react-router-dom';
 import Home from '../pages/home';
 import Info from '../pages/Account/Settings/BaseView';
 import Center from '../pages/Account/Center/Center';
@@ -24,9 +25,10 @@ import { E403, E404, E500 } from '../pages/Exception';
 import { dynamicRoute, dynamicModels } from '../utils/utils';
 import { storageClear } from '../utils/helper';
 import { getToken } from '@/utils/auth';
+import styles from './basicLayout.less';
 
 const { Content } = Layout;
-
+let lastHref;
 // 转换路由器到菜单
 function formatter(data, parentPath = '', parentAuthority, parentName) {
   return data.map(item => {
@@ -194,13 +196,13 @@ class BasicLayout extends React.PureComponent {
       }
     });
     if (!currRouterData) {
-      return 'Operation Management Platform';
+      return 'lladmin';
     }
     const message = formatMessage({
       id: currRouterData.locale || currRouterData.name,
       defaultMessage: currRouterData.name,
     });
-    return `${message} - Operation Management Platform`;
+    return `${message} - lladmin`;
   };
 
   getLayoutStyle = () => {
@@ -241,6 +243,7 @@ class BasicLayout extends React.PureComponent {
   render() {
     const {
       loading,
+      globalLoading,
       navTheme,
       layout: PropsLayout,
       user: {
@@ -248,6 +251,14 @@ class BasicLayout extends React.PureComponent {
       },
       location: { pathname },
     } = this.props;
+    const { href } = window.location;
+    if (lastHref !== href) {
+      NProgress.start();
+      if (!globalLoading) {
+        NProgress.done();
+        lastHref = href;
+      }
+    }
     const { isMobile } = this.state;
     const isTop = PropsLayout === 'topmenu';
     const menuData = this.getMenuData();
@@ -258,7 +269,6 @@ class BasicLayout extends React.PureComponent {
             logo={logo}
             theme={navTheme}
             onCollapse={this.handleMenuCollapse}
-            key={menuData}
             menuData={menuData}
             isMobile={isMobile}
             {...this.props}
@@ -316,5 +326,6 @@ export default connect(({ loading, global, setting, login }) => ({
   collapsed: global.collapsed,
   layout: setting.layout,
   loading: loading.models.login,
+  globalLoading: loading.global,
   ...setting,
 }))(BasicLayout);

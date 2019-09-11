@@ -189,6 +189,7 @@ export function dynamicRoute(nodeList, parentPath = '') {
       item.exact = false;
       arr.push(...dynamicRoute(item.children, item.fullPath));
     } else {
+      console.log(item.path);
       try {
         const route = (
           <Route

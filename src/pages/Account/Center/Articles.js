@@ -54,7 +54,7 @@ class Center extends PureComponent {
               }
               description={
                 <span>
-                  <Tag>Operation Management Platform</Tag>
+                  <Tag>lladmin</Tag>
                   <Tag>设计语言</Tag>
                   <Tag>操作管理平台</Tag>
                 </span>

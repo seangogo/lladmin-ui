@@ -10,8 +10,9 @@ import { getResources } from '../../utils/utils';
 import styles from './style.less';
 
 const { DirectoryTree, TreeNode } = Tree;
-@connect(({ role, loading }) => ({
+@connect(({ role,dept, loading }) => ({
   role,
+  dept,
   roleLoading: loading.effects['role/fetchTree'],
   resourceLoading: loading.effects['role/getAllResource'],
 }))
@@ -43,6 +44,7 @@ class role extends PureComponent {
     dispatch({
       type: 'role/fetchTree',
     });
+    dispatch({ type: 'dept/fetch' });
   }
 
   onSelect = (selectedKeys, e) => {
@@ -146,7 +148,9 @@ class role extends PureComponent {
       resourceLoading,
       role: { resources, root },
       dispatch,
+      dept: { treeData },
     } = this.props;
+    console.log(treeData);
     const {
       updateId,
       selectedRows,
@@ -172,6 +176,13 @@ class role extends PureComponent {
         key: 'name',
         require: true,
         rules: [{ required: true, message: '2-20位字符!', whitespace: true, max: 20, min: 2 }],
+      },
+      {
+        type: 'treeSelect',
+        title: '所属部门',
+        key: 'orgId',
+        require: true,
+        options: treeData,
       },
       {
         type: 'textArea',

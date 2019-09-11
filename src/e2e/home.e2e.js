@@ -7,7 +7,7 @@ describe('Homepage', () => {
     await page.goto('http://localhost:8000', { waitUntil: 'networkidle2' });
     await page.waitForSelector('#logo h1');
     const text = await page.evaluate(() => document.body.innerHTML);
-    expect(text).toContain('<h1>Operation Management Platform</h1>'); // OMP聚合业务管理平台(即Operation Management Platform),
+    expect(text).toContain('<h1>lladmin</h1>'); // OMP聚合业务管理平台(即Operation Management Platform),
     await page.close();
     browser.close();
   });

@@ -1,7 +1,7 @@
 import request from '../utils/request';
 
 export async function tree() {
-  return request('/dept/tree', {
+  return request('/dept', {
     method: 'GET',
   });
 }
