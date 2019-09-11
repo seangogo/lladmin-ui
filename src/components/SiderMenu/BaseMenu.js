@@ -29,7 +29,7 @@ export const getMenuMatches = (flatMenuKeys, path) =>
 export default class BaseMenu extends PureComponent {
   constructor(props) {
     super(props);
-    // this.flatMenuKeys = this.getFlatMenuKeys(props.menuData);
+    this.flatMenuKeys = this.getFlatMenuKeys(props.menuData);
   }
 
   /**
@@ -56,6 +56,7 @@ export default class BaseMenu extends PureComponent {
     if (!menusData) {
       return [];
     }
+
     return menusData
       .filter(item => item.name && !item.hideInMenu)
       .map(item => {
@@ -67,12 +68,9 @@ export default class BaseMenu extends PureComponent {
   };
 
   // 获取当前选中的菜单
-  getSelectedMenuKeys = () => {
-    const {
-      location: { pathname },
-    } = this.props;
-    // .map(itemPath => getMenuMatches(this.flatMenuKeys, itemPath).pop())
-    return urlToList(pathname);
+  getSelectedMenuKeys = (pathname) => {
+    const { flatMenuKeys } = this.props;
+    return urlToList(pathname).map(itemPath => getMenuMatches(flatMenuKeys, itemPath).pop());
   };
 
   /**
@@ -160,9 +158,9 @@ export default class BaseMenu extends PureComponent {
   };
 
   render() {
-    const { openKeys, theme, mode } = this.props;
+    const { openKeys, theme, mode ,location: { pathname }} = this.props;
     // 如果路径名不能匹配，使用最近的父键
-    let selectedKeys = this.getSelectedMenuKeys();
+    let selectedKeys = this.getSelectedMenuKeys(pathname);
     if (!selectedKeys.length && openKeys) {
       selectedKeys = [openKeys[openKeys.length - 1]];
     }

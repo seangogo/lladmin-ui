@@ -258,6 +258,7 @@ class BasicLayout extends React.PureComponent {
             logo={logo}
             theme={navTheme}
             onCollapse={this.handleMenuCollapse}
+            key={menuData}
             menuData={menuData}
             isMobile={isMobile}
             {...this.props}
