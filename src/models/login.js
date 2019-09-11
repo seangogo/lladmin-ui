@@ -28,9 +28,8 @@ export default {
       });
     },
     // 登陆
-    *login({ payload }, { call, put }) {
+    *login({ payload, callback }, { call, put }) {
       const { token } = yield call(login, payload);
-      console.log('login/login');
       // Login successfully
       if (token) {
         setToken(token, false); // todo 记住密码后期完善
@@ -50,12 +49,13 @@ export default {
           }
         }
         yield put(routerRedux.replace(redirect || '/home'));
+      }else {
+        callback();
       }
     },
     // 获取登陆用户信息
     *fetchCurrent({ _ }, { call, put }) {
       const response = yield call(queryCurrent);
-      console.log(response);
       yield put({
         type: 'save',
         payload: { user: response },

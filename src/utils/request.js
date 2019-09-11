@@ -27,37 +27,8 @@ const config = {
   'fota-ui.uat.pateo.com.cn': 'https://optgw-uat.pateo.com.cn/fota-auth/auth',
   'fota-ui-pro.pateo.com.cn': 'https://optgw-pro.pateo.com.cn/fota-auth/auth',
 };
-
-const resource = {
-  application: {
-    'localhost:8000': 'http://fota-application.paas.pateo.com.cn/fota-application',
-    'fota-ui.paas.pateo.com.cn': 'http://bxuigw.paas.pateo.com.cn/fota-application',
-    'fota-ui.perf.pateo.com.cn': 'http://bxuigw-bdperf.pateo.com.cn/fota-application',
-    'fota-ui.uat.pateo.com.cn': 'https://optgw-uat.pateo.com.cn/optetl',
-    'fota-ui.pro.pateo.com.cn': 'https://optgw-pro.pateo.com.cn/optetl',
-  },
-  nemp: {
-    'localhost:8000': 'http://nemp-application.paas.pateo.com.cn/nemp-application',
-    'fota-ui.paas.pateo.com.cn': 'http://bxuigw.paas.pateo.com.cn/nemp-application',
-    'fota-ui.perf.pateo.com.cn': 'http://bxuigw-bdperf.pateo.com.cn/nemp-application',
-    'fota-ui.uat.pateo.com.cn': 'https://optgw-uat.pateo.com.cn/optetl',
-    'fota-ui.pro.pateo.com.cn': 'https://optgw-pro.pateo.com.cn/optetl',
-  },
-  webSocket: {
-    '127.0.0.1:8000': 'http://127.0.0.1:8082/etl',
-    'localhost:8000': 'optetl.paas.pateo.com.cn',
-    'optui.paas.pateo.com.cn': 'optetl.paas.pateo.com.cn',
-    'optui.perf.pateo.com.cn': 'optetl.perf.pateo.com.cn',
-    'optui.uat.pateo.com.cn': 'optetl.uat.pateo.com.cn',
-    'tas.wind-link.com.cn:8382': 'optetl-pro.pateo.com.cn',
-    'optui-pro.pateo.com.cn': 'optetl-pro.pateo.com.cn',
-  },
-};
 const urls = {
   url: config[window.location.host],
-  application: resource.application[window.location.host],
-  nemp: resource.nemp[window.location.host],
-  webSocket: resource.webSocket[window.location.host],
 };
 
 function checkStatus(response) {
@@ -125,7 +96,8 @@ export default function request(url, options) {
         if (json.statusCode && json.statusCode === '0') {
           return data;
         }
-        return message.warning(json.statusMessage);
+        message.warning(json.statusMessage);
+        return json
       }
       return json;
     });

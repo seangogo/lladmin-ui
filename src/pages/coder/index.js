@@ -29,7 +29,6 @@ class coder extends PureComponent {
 
   generatorCode = () => {
    const { form: { getFieldsValue }, dispatch} =this.props;
-   console.log(getFieldsValue());
    const params = {
      tableSql:"CREATE TABLE `auth_brand` (\n `sid` varchar(36) NOT NULL,\n `create_by` varchar(255) DEFAULT NULL,\n `created_dt` datetime DEFAULT NULL,\n `del_flg` int(11) DEFAULT NULL,\n `update_by` varchar(36) DEFAULT NULL,\n `updated_dt` datetime DEFAULT NULL,\n `version` int(11) DEFAULT NULL,\n `code` varchar(20) DEFAULT NULL,\n `logo` varchar(255) DEFAULT NULL,\n `name` varchar(255) DEFAULT NULL,\n `remark` varchar(255) DEFAULT NULL,\n PRIMARY KEY (`sid`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8"
    };

@@ -213,7 +213,6 @@ export function dynamicModels(nodeList) {
     if (item.children.length > 0) {
       dynamicModels(item.children);
     } else {
-      console.log(item);
       try {
         window.g_app.model({
           namespace: item.path,

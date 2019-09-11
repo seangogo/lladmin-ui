@@ -1,7 +1,7 @@
 import React, { Fragment, PureComponent } from 'react';
 import { connect } from 'dva';
 import { stringify } from 'qs';
-import { Card, Row, Col, Input, Skeleton, Tree, Button, Tag, Table } from 'antd';
+import { Card, Row, Col, Input, Skeleton, Tree, Button, Popconfirm, Table, Icon } from 'antd';
 import Ellipsis from '../../components/Ellipsis';
 import fetch from 'dva/fetch';
 import styles from './index.less';
@@ -13,7 +13,8 @@ import { getToken, removeToken } from '@/utils/auth';
 const { DirectoryTree, TreeNode } = Tree;
 const { Search } = Input;
 
-@connect(({ generator, loading }) => ({
+@connect(({ base,generator, loading }) => ({
+  base,
   generator,
   loading: loading.effects['generator/fetch'],
   tableLoading: loading.effects['generator/fetchTable'],
@@ -21,6 +22,7 @@ const { Search } = Input;
 class generator extends PureComponent {
   state = {
     expandedKeys: [],
+    selectedKey: null,
     autoExpandParent: true,
     searchValue: {},
     generatorVisible: false,
@@ -89,6 +91,7 @@ class generator extends PureComponent {
     const { node: { props: { eventKey, title: { props } } } } = e;
     const { searchValue } = this.state;
     const { dispatch } = this.props;
+    console.log(eventKey);
     if (eventKey.startsWith('f')) {
       return false;
     }
@@ -106,7 +109,7 @@ class generator extends PureComponent {
       type: 'generator/fetchTable',
       payload: params,
     }).then(() => {
-      this.setState({ searchValue: params });
+      this.setState({ searchValue: params, selectedKey: eventKey });
     });
   };
 
@@ -129,12 +132,26 @@ class generator extends PureComponent {
       type: 'generator/fetchTable',
       payload: params,
     }).then(() => {
-      this.setState({ searchValue: params });
+      this.setState({ searchValue: params, });
     });
   };
 
+  handleRemove = () => {
+    const { dispatch } = this.props;
+    const { selectedKey } = this.state;
+    dispatch({
+      type: 'base/remove',
+      payload: { url: '/generator/database', id: selectedKey.substring(1)},
+      callback: () => {
+        dispatch({
+          type: 'generator/fetch',
+        });
+      }
+    })
+  };
+
   render() {
-    const { expandedKeys, autoExpandParent, searchValue, generatorVisible, tableFormData, fields, dbVisible, formData } = this.state;
+    const { expandedKeys, selectedKey, autoExpandParent, searchValue, generatorVisible, tableFormData, fields, dbVisible, formData } = this.state;
     const { loading, tableLoading, generator: { treeData, page: { list, pagination } }, dispatch } = this.props;
     const loop = data =>
       data.map(item => {
@@ -281,6 +298,7 @@ class generator extends PureComponent {
                 <Skeleton loading={loading} active>
                   <DirectoryTree
                     showIcon
+                    draggable
                     expandedKeys={expandedKeys}
                     onSelect={this.onSelect}
                     autoExpandParent={autoExpandParent}
@@ -302,7 +320,17 @@ class generator extends PureComponent {
               className={styles.listCard}
               bordered={false}
               title="表数据列表"
-              extra={null}
+              extra={selectedKey  && selectedKey.startsWith("d") &&
+              <Popconfirm
+                title="Are you sure delete this database?"
+                onConfirm={this.handleRemove}
+                onCancel={()=>console.log("onCancel")}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Icon type="delete" />
+              </Popconfirm>
+              }
             >
               <Button
                 type="dashed"

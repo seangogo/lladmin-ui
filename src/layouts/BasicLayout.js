@@ -22,7 +22,7 @@ import Header from './Header';
 import Context from './MenuContext';
 import { E403, E404, E500 } from '../pages/Exception';
 import { dynamicRoute, dynamicModels } from '../utils/utils';
-import { isLogin, storageClear } from '../utils/helper';
+import { storageClear } from '../utils/helper';
 import { getToken } from '@/utils/auth';
 
 const { Content } = Layout;

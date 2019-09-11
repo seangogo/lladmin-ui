@@ -20,7 +20,6 @@ class LoginPage extends Component {
   };
 
   componentWillMount() {
-    console.log('componentWillMount');
     if (getToken()) {
       this.props.dispatch(routerRedux.replace('/home'));
     } else {
@@ -51,6 +50,7 @@ class LoginPage extends Component {
             ...{ uuid: captcha.uuid },
             ...values,
           },
+          callback: () => this.onGetCaptcha(),
         });
       }
     });
@@ -73,7 +73,6 @@ class LoginPage extends Component {
     const { passwordIcon } = this.state;
     const { getFieldDecorator } = form;
     const { href } = window.location;
-    const { type, autoLogin } = this.state;
     return (
       <div className={styles.main}>
         <h3 className={styles.title} style={{ fontSize: 14 }}>

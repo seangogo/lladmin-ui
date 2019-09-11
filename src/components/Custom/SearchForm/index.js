@@ -55,8 +55,6 @@ class SearchForm extends PureComponent {
       form: { getFieldDecorator },
       searchItems,
     } = this.props;
-    console.log(this.state.expandForm);
-    console.log(searchItems);
     const loopFormItems = data =>
       data.map((item, i) => {
         if (!this.state.expandForm && i > 1) {
