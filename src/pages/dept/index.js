@@ -93,7 +93,6 @@ class dept extends React.PureComponent {
       brand: { select },
       dispatch,
     } = this.props;
-    console.log(treeData);
     const formItems = [
       {
         type: 'treeSelect',

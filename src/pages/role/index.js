@@ -150,7 +150,6 @@ class role extends PureComponent {
       dispatch,
       dept: { treeData },
     } = this.props;
-    console.log(treeData);
     const {
       updateId,
       selectedRows,
@@ -160,6 +159,8 @@ class role extends PureComponent {
       roleFormData,
       selectedLevelCode,
     } = this.state;
+    console.log(root)
+    console.log('root');
     loopTreeNode([root], ['name', 'id']);
     const dataList = getResources(root).filter(d => d.levelCode.indexOf(selectedLevelCode) === 0);
     const roleFormItems = [

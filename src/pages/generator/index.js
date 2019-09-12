@@ -91,7 +91,6 @@ class generator extends PureComponent {
     const { node: { props: { eventKey, title: { props } } } } = e;
     const { searchValue } = this.state;
     const { dispatch } = this.props;
-    console.log(eventKey);
     if (eventKey.startsWith('f')) {
       return false;
     }

@@ -33,11 +33,11 @@ const urls = {
 
 function checkStatus(response) {
   if (response.status === 401) {
-    removeToken();
     response.json().then(() => {
       message.warning('登陆已失效，请重新登陆');
     });
-    routerRedux.push('/guest/login')
+    removeToken();
+    routerRedux.push('/guest/login');
     return;
   }
   if (response.status >= 200 && response.status <= 300) {
@@ -72,7 +72,7 @@ export default function request(url, options) {
   const ip = url.indexOf('r:') === 0 ? urls[url.substring(2, url.indexOf('/'))] : urls.url;
   return fetch(
     `${ip}${url.indexOf('r:') === 0 ? url.substring(url.indexOf('/')) : url}`,
-    newOptions
+    newOptions,
   )
     .then(checkStatus)
     .then(response => {
@@ -93,12 +93,13 @@ export default function request(url, options) {
     .then(json => {
       const { statusCode, statusMessage, data } = json;
       if (statusCode && statusMessage) {
-        if (json.statusCode && json.statusCode === '0') {
+        if (statusCode === '0') {
           return data;
+        } else {
+          message.warning(json.statusMessage);
         }
-        message.warning(json.statusMessage);
-        return json
+      } else {
+        return json;
       }
-      return json;
     });
 }
