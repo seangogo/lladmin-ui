@@ -114,12 +114,12 @@ class role extends PureComponent {
     data.map(item => {
       if (item.children) {
         return (
-          <TreeNode key={item.id} title={item.name} levelCode={item.levelCode}>
+          <TreeNode key={item.value} title={item.title} levelCode={item.levelCode}>
             {this.renderRoleTreeNodes(item.children)}
           </TreeNode>
         );
       }
-      return <TreeNode key={item.id} title={item.name} levelCode={item.levelCode} />;
+      return <TreeNode key={item.value} title={item.title} levelCode={item.levelCode} />;
     });
 
   renderResourceTreeNodes = data =>
@@ -159,9 +159,6 @@ class role extends PureComponent {
       roleFormData,
       selectedLevelCode,
     } = this.state;
-    console.log(root)
-    console.log('root');
-    loopTreeNode([root], ['name', 'id']);
     const dataList = getResources(root).filter(d => d.levelCode.indexOf(selectedLevelCode) === 0);
     const roleFormItems = [
       {
@@ -181,7 +178,7 @@ class role extends PureComponent {
       {
         type: 'treeSelect',
         title: '所属部门',
-        key: 'orgId',
+        key: 'dept.id',
         require: true,
         options: treeData,
       },
@@ -233,6 +230,7 @@ class role extends PureComponent {
         },
       },
     ];
+    console.log(root);
     return (
       <Fragment>
         <Row gutter={{ md: 2, lg: 6, xl: 12 }} className={styles.row}>
@@ -245,7 +243,7 @@ class role extends PureComponent {
                     expandAction="doubleClick"
                     onSelect={this.onSelect}
                   >
-                    {this.renderRoleTreeNodes(root.children)}
+                    {this.renderRoleTreeNodes([root])}
                   </DirectoryTree>
                 </Skeleton>
               }
