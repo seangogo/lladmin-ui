@@ -1,7 +1,24 @@
 @import '~antd/lib/style/themes/default.less';
 @import '~@/utils/utils.less';
 
-.row {
+.evenly-distributed-children {
+  display: flex;
+  justify-content: space-between;
+  @media screen and (max-width: 1440px) {
+    height: 540px;
+  }
+  height: 720px;
+  & > div{
+    &:first-child{
+      width: 24%;
+    }
+    &:nth-child(2){
+      width:50%;
+    }
+    &:last-child{
+      width: 24%;
+    }
+  }
   .leftCard {
     overflow-x: hidden;
     height: 100%;
@@ -11,32 +28,71 @@
       }
       .ant-card-body {
         @media screen and (max-width: 1440px) {
-          height: 540px;
+          max-height: 540px;
         }
-        height: 720px;
+        max-height: 720px;
       }
     }
   }
-  .centerCards {
-    .listCard {
-      @media screen and (max-width: 1440px) {
-        height: 540px;
-      }
-      height: 720px;
-      overflow-x: hidden;
+  .button-border {
+    margin-bottom: 16px;
+  }
+  .button {
+    border-radius: 8px;
+    background-color: @primary-color;
+    border: none;
+    color: #ffffff;
+    outline: none;
+    padding: 12px 40px 10px;
+    position: relative;
+    span {
+      margin-left: 8px;
     }
   }
-  .rightCards {
-    :global {
-      .ompIcon {
-        font-size: 14px;
-        line-height: 14px;
-        margin-right: 8px;
-        font-weight: 600;
-      }
-      .ant-tree-title {
-        font-size: 16px;
-      }
-    }
+  .button:before,
+  .button:after {
+    border: 0 solid transparent;
+    transition: all 0.25s;
+    content: '';
+    height: 24px;
+    position: absolute;
+    width: 24px;
   }
+  .button:before {
+    border-top: 2px solid @primary-color;
+    left: 0;
+    top: -5px;
+  }
+  .button:after {
+    border-bottom: 2px solid @primary-color;
+    bottom: -5px;
+    right: 0;
+  }
+  .button:hover {
+    background-color: @primary-color;
+  }
+  .button:hover:before,
+  .button:hover:after {
+    height: 100%;
+    width: 100%;
+  }
+  //.rightCards {
+  //  :global {
+  //    .ompIcon {
+  //      font-size: 14px;
+  //      line-height: 14px;
+  //      margin-right: 8px;
+  //      font-weight: 600;
+  //    }
+  //    .ant-card-body {
+  //      @media screen and (max-width: 1440px) {
+  //        height: 540px;
+  //      }
+  //      height: 720px;
+  //    }
+  //    .ant-tree-title {
+  //      font-size: 16px;
+  //    }
+  //  }
+  //}
 }

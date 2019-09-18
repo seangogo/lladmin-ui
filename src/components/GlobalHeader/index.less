@@ -33,7 +33,7 @@
   }
 }
 
-i.trigger {
+i.collapsed {
   font-size: 20px;
   height: 64px;
   cursor: pointer;
@@ -43,6 +43,20 @@ i.trigger {
     background: @pro-header-hover-bg;
   }
 }
+
+i.uncollapsed {
+  font-size: 20px;
+  height: 64px;
+  cursor: pointer;
+  transition: all 0.3s, padding 0s;
+  padding: 22px 24px;
+  transform: rotate(540deg);
+  &:hover {
+    background: @pro-header-hover-bg;
+  }
+}
+
+
 
 .right {
   float: right;

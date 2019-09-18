@@ -1,16 +1,15 @@
 import React, { Fragment, PureComponent } from 'react';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
-import { OmpIcon } from '@/components/Custom';
-import { Card, Form, Tree, Table, message, Button, Skeleton, Row, Col } from 'antd';
-import Ellipsis from '../../components/Ellipsis';
-import { ModalForm, AuthButtons } from '../../components/Custom';
-import { loopTreeNode } from '@/utils/utils';
-import { getResources } from '../../utils/utils';
+import { Card, Form, Tree, Table, message, Skeleton, Icon } from 'antd';
+import Ellipsis from '@/components/Ellipsis';
+import { ModalForm, AuthButtons, OmpIcon } from '@/components/Custom';
+import { getResources } from '@/utils/utils';
 import styles from './style.less';
 
 const { DirectoryTree, TreeNode } = Tree;
-@connect(({ role,dept, loading }) => ({
+
+@connect(({ role, dept, loading }) => ({
   role,
   dept,
   roleLoading: loading.effects['role/fetchTree'],
@@ -48,11 +47,7 @@ class role extends PureComponent {
   }
 
   onSelect = (selectedKeys, e) => {
-    const {
-      node: {
-        props: { levelCode },
-      },
-    } = e;
+    const { node: { props: { levelCode } } } = e;
     this.setState({ selectedLevelCode: levelCode });
   };
 
@@ -67,12 +62,10 @@ class role extends PureComponent {
       type: 'role/bindResource',
       payload: { roleId: updateId, resourceIds: payLoads },
       callback: response => {
-        if (response.statusCode === '0') {
-          message.success('授权成功');
-          dispatch({
-            type: 'role/fetchTree',
-          });
-        }
+        message.success('授权成功');
+        dispatch({
+          type: 'role/fetchTree',
+        });
       },
     });
   };
@@ -86,12 +79,12 @@ class role extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'role/getResourcesIds',
-      payload: record.id,
+      payload: record.value,
       callback: data => {
         const { activeKeys, ...checkedKeys } = data;
         this.setState({
           checkedKeys: { ...checkedKeys },
-          updateId: record.id,
+          updateId: record.value,
           activeKeys,
         });
       },
@@ -112,7 +105,7 @@ class role extends PureComponent {
 
   renderRoleTreeNodes = data =>
     data.map(item => {
-      if (item.children) {
+      if (item.children.length > 0) {
         return (
           <TreeNode key={item.value} title={item.title} levelCode={item.levelCode}>
             {this.renderRoleTreeNodes(item.children)}
@@ -159,7 +152,7 @@ class role extends PureComponent {
       roleFormData,
       selectedLevelCode,
     } = this.state;
-    const dataList = getResources(root).filter(d => d.levelCode.indexOf(selectedLevelCode) === 0);
+    const dataList = getResources(root).filter(d => d.levelCode.startsWith(selectedLevelCode));
     const roleFormItems = [
       {
         type: 'treeSelect',
@@ -191,7 +184,7 @@ class role extends PureComponent {
     const columns = [
       {
         title: '角色名称',
-        dataIndex: 'name',
+        dataIndex: 'title',
         render: text => (
           <Ellipsis length={8} tooltip>
             {text}
@@ -230,85 +223,79 @@ class role extends PureComponent {
         },
       },
     ];
-    console.log(root);
+
     return (
       <Fragment>
-        <Row gutter={{ md: 2, lg: 6, xl: 12 }} className={styles.row}>
-          <Col xl={6} lg={10} md={12} sm={24} xs={24}>
-            <Card bordered={false} className={styles.leftCard}>
-              {
-                <Skeleton loading={roleLoading} active>
-                  <DirectoryTree
-                    defaultExpandAll
-                    expandAction="doubleClick"
-                    onSelect={this.onSelect}
-                  >
-                    {this.renderRoleTreeNodes([root])}
-                  </DirectoryTree>
-                </Skeleton>
-              }
-            </Card>
-          </Col>
-          <Col xl={12} lg={10} md={12} sm={24} xs={24} className={styles.centerCards}>
-            <Card bordered={false} className={styles.card}>
-              <div className={styles.tableList}>
-                <div className={styles.tableListOperator}>
-                  <Button
-                    icon="plus"
-                    type="primary"
-                    htmlType="submit"
-                    // disabled={!this.context.authButton.includes('role-opt')}
-                    onClick={() => this.setState({ modelVisible: true })}
-                  >
-                    新增
-                  </Button>
-                </div>
-                <div className={styles.standardTable}>
-                  <Table
-                    loading={roleLoading}
-                    rowKey={record => record.id}
-                    dataSource={dataList}
-                    childrenColumnName="child"
-                    columns={columns}
-                    pagination={false}
-                    onSelectRow={this.handleSelectRows}
-                    selectedRows={selectedRows}
-                    onRow={record => ({
-                      onClick: () => this.handleAuthorization(record),
-                    })}
-                  />
-                </div>
-              </div>
-            </Card>
-          </Col>
-          <Col xl={6} lg={10} md={12} sm={24} xs={24} className={styles.rightCards}>
-            <Card
-              title="资源信息"
-              loading={resourceLoading}
-              extra={
-                updateId && (
-                  <a href="#" onClick={() => this.onOk()}>
-                    保存
-                  </a>
-                )
-              }
-              bordered={false}
-              className={styles.card}
+        <div className={styles['evenly-distributed-children']}>
+          <Card bordered={false}>
+            {
+              <Skeleton loading={roleLoading} active>
+                <DirectoryTree
+                  defaultExpandAll
+                  expandAction="doubleClick"
+                  onSelect={this.onSelect}
+                >
+                  {this.renderRoleTreeNodes(root.children)}
+                </DirectoryTree>
+              </Skeleton>
+            }
+          </Card>
+          <Card bordered={false}>
+            <div className={styles['button-border']}>
+              <button className={styles.button} onClick={() => this.setState({ modelVisible: true })}>
+                <span>Create</span>
+              </button>
+            </div>
+            {/* <Button */}
+            {/* icon="plus" */}
+            {/* type="primary" */}
+            {/* htmlType="submit" */}
+            {/* onClick={() => this.setState({ modelVisible: true })} */}
+            {/* > */}
+            {/* 新增 */}
+            {/* </Button> */}
+            <div className={styles.standardTable}>
+              <Table
+                scroll={{ y: window.screen.width > 1440 ? 560 : 400 }}
+                loading={roleLoading}
+                rowKey={record => record.value}
+                dataSource={dataList}
+                childrenColumnName="child"
+                columns={columns}
+                pagination={false}
+                onSelectRow={this.handleSelectRows}
+                selectedRows={selectedRows}
+                onRow={record => ({
+                  onClick: () => this.handleAuthorization(record),
+                })}
+              />
+            </div>
+          </Card>
+          <Card
+            title="资源信息"
+            loading={resourceLoading}
+            extra={
+              updateId && (
+                <a href="#" onClick={() => this.onOk()}>
+                  保存
+                </a>
+              )
+            }
+            bordered={false}
+          >
+            <Tree
+              defaultExpandAll
+              checkable
+              checkedKeys={checkedKeys}
+              showIcon
+              onCheck={this.onCheck}
+              onSelect={this.onSelect}
+              selectedKeys={selectedKeys}
             >
-              <Tree
-                defaultExpandAll
-                checkable
-                checkedKeys={checkedKeys}
-                showIcon
-                onCheck={this.onCheck}
-                onSelect={this.onSelect}
-                selectedKeys={selectedKeys}
-              >
-                {this.renderResourceTreeNodes(resources)}
-              </Tree>
-            </Card>
-          </Col>
-        </Row>
+              {this.renderResourceTreeNodes(resources)}
+            </Tree>
+          </Card>
+        </div>
         <ModalForm
           changeVisible={() => this.setState({ modelVisible: false, roleFormData: {} })}
           formItems={roleFormItems}
@@ -323,4 +310,5 @@ class role extends PureComponent {
     );
   }
 }
+
 export default role;

@@ -127,12 +127,8 @@ class ModalForm extends React.PureComponent {
     dispatch({
       type: data.id ? 'base/edit' : 'base/add',
       payload: data,
-      callback: response => {
-        if (response.statusCode === '0') {
-          message.success(data.id ? '操作成功' : '新增成功');
-        } else {
-          message.warning(response.statusMessage);
-        }
+      callback: () => {
+        message.success(data.id ? '操作成功' : '新增成功');
         if (callBackFetch) {
           callBackFetch();
         }

@@ -307,6 +307,7 @@ class user extends PureComponent {
       dept: { treeData },
       dispatch,
     } = this.props;
+    console.log(treeData);
     const { activeVisible } = this.state;
     const formItems = [
       {

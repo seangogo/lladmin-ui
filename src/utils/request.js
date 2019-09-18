@@ -32,6 +32,8 @@ const urls = {
 };
 
 function checkStatus(response) {
+  console.log('checkStatus')
+  console.log(response)
   if (response.status === 401) {
     response.json().then(() => {
       message.warning('登陆已失效，请重新登陆');
@@ -91,15 +93,46 @@ export default function request(url, options) {
       return json;
     })
     .then(json => {
+      console.log(json)
+      console.log('json')
       const { statusCode, statusMessage, data } = json;
       if (statusCode && statusMessage) {
         if (statusCode === '0') {
           return data;
-        } else {
+        } else{
           message.warning(json.statusMessage);
+          return false;
         }
       } else {
         return json;
+      }
+    }).catch(e => {
+      const { name: status } = e;
+      if (status === 400) {
+        routerRedux.push('/403');
+        return;
+      }
+      if (status === 401) {
+        routerRedux.push('/guest/login');
+        return;
+      }
+      if (status === 403) {
+        routerRedux.push('/403');
+        return;
+      }
+      if (status <= 504 && status >= 500) {
+        routerRedux.push('/500');
+        return;
+      }
+      if (status >= 404 && status < 422) {
+        routerRedux.push('/404');
+        return;
+      }
+      if (status === 'SyntaxError') {
+        message.error(`SyntaxError:${e.message}`);
+        setTimeout(() => {
+          routerRedux.push('/guest/login');
+        }, 1500);
       }
     });
 }

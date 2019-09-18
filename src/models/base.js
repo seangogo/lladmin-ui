@@ -36,12 +36,8 @@ export default {
       yield put({
         type: 'save',
       });
-      const response = yield call(add, payload);
-      yield put({
-        type: 'save',
-        payload: { data: response },
-      });
-      if (callback) callback(response);
+      yield call(add, payload);
+      if (callback) callback();
     },
     *edit({ payload, callback }, { call, put }) {
       yield put({

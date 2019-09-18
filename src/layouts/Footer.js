@@ -1,37 +1,21 @@
 import React, { Fragment } from 'react';
 import { Layout, Icon } from 'antd';
-import GlobalFooter from '@/components/GlobalFooter';
+import styles from './footer.less'
 
-const { Footer } = Layout;
 const FooterView = () => (
-  <Footer style={{ padding: 0 }}>
-    <GlobalFooter
-      links={[
-        {
-          key: '首页',
-          title: '首页',
-          href: '/home',
-          blankTarget: false,
-        },
-        {
-          key: 'github',
-          title: <Icon type="github" />,
-          href: 'https://github.com/ant-design/ant-design-pro',
-          blankTarget: true,
-        },
-        {
-          key: 'll-admin',
-          title: 'Ant Design',
-          href: 'https://ant.design',
-          blankTarget: true,
-        },
-      ]}
-      copyright={
-        <Fragment>
-          Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
-        </Fragment>
-      }
-    />
-  </Footer>
+  <div className={styles['main-footer']}>
+    <Fragment>
+      <span>
+        © 2019 Xiao Jun
+        <a href="http://www.apache.org/licenses/LICENSE-2.0">
+          Apache License 2.0
+        </a>
+      </span>
+      <span> ⋅ </span>
+      <a href="http://www.beian.miit.gov.cn">
+        浙ICP备xxxxxxx号
+      </a>
+    </Fragment>
+  </div>
 );
 export default FooterView;
