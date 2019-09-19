@@ -25,6 +25,7 @@ import { E403, E404, E500 } from '../pages/Exception';
 import { dynamicRoute, dynamicModels } from '../utils/utils';
 import { storageClear } from '../utils/helper';
 import { getToken } from '@/utils/auth';
+import AnimatedSwitch from '@/components/PageLoading/AnimatedSwitch';
 import styles from './basicLayout.less';
 
 const { Content } = Layout;
@@ -221,6 +222,7 @@ class BasicLayout extends React.PureComponent {
     return {
       margin: '24px 24px 0',
       paddingTop: fixedHeader ? 64 : 0,
+      position: 'relative'
     };
   };
 
@@ -289,15 +291,15 @@ class BasicLayout extends React.PureComponent {
           />
           <Content style={this.getContentStyle()}>
             {loading === false && (
-              <Switch>
-                <Route exact path="/home" component={Home} />
-                <Route exact path="/userInfo" component={Info} />
-                <Route exact path="/userCenter" component={Center} />
-                <Route exact path="/exception403" component={E403} />
-                <Route exact path="/exception405" component={E500} />
-                {dynamicRoute(children)}
-                <Route component={E404} />
-              </Switch>
+                <AnimatedSwitch>
+                  <Route exact path="/home" component={Home} />
+                  <Route exact path="/userInfo" component={Info} />
+                  <Route exact path="/userCenter" component={Center} />
+                  <Route exact path="/exception403" component={E403} />
+                  <Route exact path="/exception405" component={E500} />
+                  {dynamicRoute(children)}
+                  <Route component={E404} />
+                </AnimatedSwitch>
             )}
           </Content>
           <Footer />

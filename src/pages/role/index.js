@@ -23,8 +23,8 @@ class role extends PureComponent {
 
   state = {
     modelVisible: false,
+    resourceSave: false,
     roleFormData: {},
-    selectedRows: [],
     updateId: '',
     checkedKeys: {
       checked: [],
@@ -61,7 +61,7 @@ class role extends PureComponent {
     dispatch({
       type: 'role/bindResource',
       payload: { roleId: updateId, resourceIds: payLoads },
-      callback: response => {
+      callback: () => {
         message.success('授权成功');
         dispatch({
           type: 'role/fetchTree',
@@ -72,7 +72,7 @@ class role extends PureComponent {
 
   onCheck = (checkedKeys, e) => {
     const checkedObj = { checked: checkedKeys, halfChecked: e.halfCheckedKeys };
-    this.setState({ checkedKeys: { ...checkedObj } });
+    this.setState({ checkedKeys: { ...checkedObj }, resourceSave: true });
   };
 
   handleAuthorization = record => {
@@ -86,6 +86,7 @@ class role extends PureComponent {
           checkedKeys: { ...checkedKeys },
           updateId: record.value,
           activeKeys,
+          resourceSave: false,
         });
       },
     });
@@ -144,13 +145,12 @@ class role extends PureComponent {
       dept: { treeData },
     } = this.props;
     const {
-      updateId,
-      selectedRows,
       checkedKeys,
       selectedKeys,
       modelVisible,
       roleFormData,
       selectedLevelCode,
+      resourceSave,
     } = this.state;
     const dataList = getResources(root).filter(d => d.levelCode.startsWith(selectedLevelCode));
     const roleFormItems = [
@@ -185,6 +185,27 @@ class role extends PureComponent {
       {
         title: '角色名称',
         dataIndex: 'title',
+        width: "20%",
+        render: text => (
+          <Ellipsis length={8} tooltip>
+            {text}
+          </Ellipsis>
+        ),
+      },
+      {
+        title: '角色编码',
+        dataIndex: 'code',
+        width: "20%",
+        render: text => (
+          <Ellipsis length={5} tooltip>
+            {text}
+          </Ellipsis>
+        ),
+      },
+      {
+        title: '层级编码',
+        dataIndex: 'levelCode',
+        width: "20%",
         render: text => (
           <Ellipsis length={8} tooltip>
             {text}
@@ -195,8 +216,9 @@ class role extends PureComponent {
         title: '角色简介',
         dataIndex: 'remark',
         key: 'remark',
+        width: "20%",
         render: text => (
-          <Ellipsis length={15} tooltip>
+          <Ellipsis length={8} tooltip>
             {text}
           </Ellipsis>
         ),
@@ -204,15 +226,16 @@ class role extends PureComponent {
       {
         title: '操作',
         dataIndex: '操作',
+        width: "20%",
         render: (text, record) => {
           const btns = [
             {
-              title: '编辑',
+              title: 'edit',
               key: 'edit',
               onConfirm: () => this.setState({ roleFormData: record, modelVisible: true }),
             },
             {
-              title: '删除',
+              title: 'delete',
               key: 'delete',
               message: '是否确认删除该角色？',
               Popconfirm: true,
@@ -256,6 +279,7 @@ class role extends PureComponent {
             {/* </Button> */}
             <div className={styles.standardTable}>
               <Table
+                bordered
                 scroll={{ y: window.screen.width > 1440 ? 560 : 400 }}
                 loading={roleLoading}
                 rowKey={record => record.value}
@@ -263,8 +287,7 @@ class role extends PureComponent {
                 childrenColumnName="child"
                 columns={columns}
                 pagination={false}
-                onSelectRow={this.handleSelectRows}
-                selectedRows={selectedRows}
+                size="middle"
                 onRow={record => ({
                   onClick: () => this.handleAuthorization(record),
                 })}
@@ -274,13 +297,7 @@ class role extends PureComponent {
           <Card
             title="资源信息"
             loading={resourceLoading}
-            extra={
-              updateId && (
-                <a href="#" onClick={() => this.onOk()}>
-                  保存
-                </a>
-              )
-            }
+            extra={resourceSave && (<a href="#" onClick={() => this.onOk()}>保存</a>)}
             bordered={false}
           >
             <Tree

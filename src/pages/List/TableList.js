@@ -418,12 +418,6 @@ class TableList extends PureComponent {
     }
   };
 
-  handleSelectRows = rows => {
-    this.setState({
-      selectedRows: rows,
-    });
-  };
-
   handleSearch = e => {
     e.preventDefault();
 
