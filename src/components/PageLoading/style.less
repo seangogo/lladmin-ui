@@ -1,0 +1,76 @@
+.route {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  :global {
+    //.fade-enter-active {
+    //  opacity: 1;
+    //  transform: scale(1);
+    //  transition: opacity 500ms, transform 500ms;
+    //}
+    //
+    //.fade-exit-active {
+    //  opacity: 0;
+    //  transform: scale(0.9);
+    //  transition: opacity 500ms, transform 500ms;
+    //}
+    //
+    //.fade-enter {
+    //  opacity: 0;
+    //  transform: scale(1.1);
+    //}
+    //
+    //.fade-exit {
+    //  opacity: 0;
+    //  transform: scale(1);
+    //}
+    //
+    //.fade-enter-done {
+    //  opacity: 1;
+    //}
+    ///**********************
+    // 帧动画
+    //.fade-enter {
+    //  opacity: 0;
+    //}
+    //
+    //.fade-enter.fade-enter-active {
+    //  opacity: 1;
+    //  transition: opacity 300ms ease-in;
+    //}
+    //
+    //.fade-exit {
+    //  opacity: 0;
+    //}
+    //
+    //.fade-exit.fade-exit-active {
+    //  opacity: 0;
+    //  transition: opacity 300ms ease-in;
+    //}
+    //**********
+    .fade-enter-active,
+    .fade-exit-active {
+      transition: 500ms;
+    }
+
+    .fade-enter {
+      transform: translateX(-100%);
+      max-height: 0;
+    }
+
+    .fade-enter-active {
+      transform: translateX(0);
+      max-height: 300px;
+    }
+
+    .fade-exit {
+      opacity: 0;
+    }
+
+    .fade-exit-active {
+      transform: translateX(50%);
+    }
+  }
+}

@@ -32,8 +32,6 @@ const urls = {
 };
 
 function checkStatus(response) {
-  console.log('checkStatus')
-  console.log(response)
   if (response.status === 401) {
     response.json().then(() => {
       message.warning('登陆已失效，请重新登陆');
@@ -93,8 +91,6 @@ export default function request(url, options) {
       return json;
     })
     .then(json => {
-      console.log(json)
-      console.log('json')
       const { statusCode, statusMessage, data } = json;
       if (statusCode && statusMessage) {
         if (statusCode === '0') {

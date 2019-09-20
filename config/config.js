@@ -70,7 +70,7 @@ export default {
           .split('\\')
           .map(a => a.replace(/([A-Z])/g, '-$1'))
           .map(a => a.toLowerCase());
-        return `omp${arr.join('-')}-${localName}`.replace(/--/g, '-');
+        return `admin${arr.join('-')}-${localName}`.replace(/--/g, '-');
       }
       return localName;
     },
