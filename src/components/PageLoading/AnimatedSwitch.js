@@ -15,28 +15,54 @@ const AnimatedSwitch = props => {
         render={({ location }) => (
           <TransitionGroup>
             <CSSTransition
-              in={show&&loading}
-              timeout={500}
+              in={loading}
+              timeout={{
+                enter: 600,
+                exit: 600,
+              }}
               key={location.key}
               classNames='fade'
+              className={styles.fade}
               exit
-              unmountOnExit
               onEnter={(node, isAppearing)=>{
+                console.log(show);
                 console.log('node');
+                console.log('开始进入。。。');
                 console.log(node)
+                console.log(isAppearing)
                 console.log('isAppearing')
+             }}
+              onEntering={(node, isAppearing) => {
+                console.log(show);
+                console.log('进入中。。。');
+                console.log('entering11')
+                console.log('onEntering-node')
+                console.log(node)
                 console.log(isAppearing)
               }}
-              onEntering={(node, isAppearing) => {
-                console.log('entering11')
+              onExit={(node) => {
+                console.log(show);
+                console.log(node);
+                console.log('退出之前')
+                console.log('onExiting？？？')
               }}
-              onExiting={() => {console.log('onExiting222')}}
+              onExiting={(node) => {
+                console.log(show);
+                console.log(node);
+                console.log('退出中....')
+                console.log('onExiting222')
+              }}
               onEntered={(node, isAppearing) => {
+                setShow(false)
+                console.log(show);
+                console.log('进入完成....')
                 console.log(node,isAppearing)
                 console.log('onEntered3333')
-                setShow(false)
               }}
-              onExited={() => {
+              onExited={(node) => {
+                console.log(show);
+                console.log(node);
+                console.log('退出完成....')
                 console.log('onExited444')
                 setShow(true)
               }}

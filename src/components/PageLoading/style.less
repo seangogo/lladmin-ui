@@ -4,6 +4,13 @@
   top: 0;
   width: 100%;
   height: 100%;
+  .fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
   :global {
     //.fade-enter-active {
     //  opacity: 1;
@@ -50,27 +57,44 @@
     //  transition: opacity 300ms ease-in;
     //}
     //**********
+    .fade-enter {
+      transform: translate3d(100%, 0, 0);
+      //transform: translateX(-20%);
+      //@media screen and (max-width: 1440px) {
+      //  max-height: 540px;
+      //}
+      //max-height: 720px;
+      //background-color: #8c00ff;
+    }
+
     .fade-enter-active,
     .fade-exit-active {
-      transition: 500ms;
+      transform: translate3d(0, 0, 0);
+      will-change: transform;
+      transition: all 600ms cubic-bezier(0.645, 0.045, 0.355, 1);
     }
 
-    .fade-enter {
-      transform: translateX(-100%);
-      max-height: 0;
-    }
-
-    .fade-enter-active {
-      transform: translateX(0);
-      max-height: 300px;
-    }
-
+    //.fade-enter-active {
+    //  transform: translateX(0);
+    //  @media screen and (max-width: 1440px) {
+    //    max-height: 540px;
+    //  }
+    //  max-height: 720px;
+    //}
     .fade-exit {
-      opacity: 0;
+      transform: translate3d(0, 0, 0);
+      display: none;
+      //position: absolute;
+      //left: 0;
+      //top: 0;
+      //width: 100%;
+      //height: 100%;
     }
 
-    .fade-exit-active {
-      transform: translateX(50%);
+    .fade-exit .fade-exit-active {
+      transform: translate3d(100%, 0, 0);
+      will-change: transform;
+      transition: all 500ms cubic-bezier(0.645, 0.045, 0.355, 1);
     }
   }
 }
