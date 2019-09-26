@@ -67,12 +67,11 @@ class LoginPage extends Component {
   );
 
   render() {
-    const { login, submitting } = this.props;
+    const { login } = this.props;
     const { captcha } = login;
     const { form } = this.props;
     const { passwordIcon } = this.state;
     const { getFieldDecorator } = form;
-    const { href } = window.location;
     return (
       <div className={styles.main}>
         <h3 className={styles.title} style={{ fontSize: 14 }}>

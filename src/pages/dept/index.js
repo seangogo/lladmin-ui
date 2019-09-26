@@ -7,38 +7,9 @@ import styles from '@/components/Custom/Table/TableList.less';
 
 const { Description } = DescriptionList;
 const { TreeNode } = Tree;
-const tagColors = [
-  'volcano',
-  'purple',
-  'gold',
-  'lime',
-  'green',
-  'cyan',
-  'blue',
-  'geekblue',
-  'red',
-  'orange',
-];
-const getParentKey = (id, tree) => {
-  let parentKey;
-  for (let i = 0; i < tree.length; i++) {
-    const node = tree[i];
-    if (node.id === id) {
-      parentKey = node;
-    }
-    if (node.children.length > 0) {
-      if (node.children.find(item => item.id === id)) {
-        parentKey = node.children.find(item => item.id === id);
-      } else if (getParentKey(id, node.children)) {
-        parentKey = getParentKey(id, node.children);
-      }
-    }
-  }
-  return parentKey;
-};
-@connect(({ dept, brand, project, loading }) => ({
+
+@connect(({ dept, project, loading }) => ({
   dept,
-  brand,
   project,
   loading: loading.models.dept,
 }))
@@ -89,10 +60,10 @@ class dept extends React.PureComponent {
     const { formData, autoExpandParent, expandedKeys } = this.state;
     const {
       loading,
-      org: { treeData },
-      brand: { select },
+      dept: { treeData },
       dispatch,
     } = this.props;
+    console.log(treeData);
     const formItems = [
       {
         type: 'treeSelect',
@@ -100,13 +71,6 @@ class dept extends React.PureComponent {
         key: 'parentId',
         require: true,
         options: treeData,
-      },
-      {
-        type: 'multiSelect',
-        title: '关联品牌',
-        key: 'brandIds',
-        require: true,
-        options: select,
       },
       {
         type: 'input',
@@ -138,73 +102,26 @@ class dept extends React.PureComponent {
         key: 'remark',
       },
     ];
-    const nodeMenu = data => {
-      return (
-        <Dropdown
-          overlay={
-            <Menu
-              style={{ marginLeft: 70 }}
-              onClick={a => {
-                if (a.key === 'delete') {
-                  if (this.state.formData.id === data.id) {
-                    this.setState({ formData: {} });
-                  }
-                  return;
-                }
-                this.setState({ formData: data });
-                if (a.key === 'look') {
-                  return;
-                }
-                this.setState({ visible: true });
-              }}
-            >
-              <Menu.Item key="edit">
-                <Icon type="edit" /> 编辑
-              </Menu.Item>
-              <Menu.Divider />
-              <Menu.Item key="delete">
-                <Popconfirm
-                  title="是否确认移除此组织？"
-                  onConfirm={() =>
-                    this.props.dispatch({
-                      type: 'dept/remove',
-                      payload: data.id,
-                    })
-                  }
-                >
-                  <Icon type="delete" /> 删除
-                </Popconfirm>
-              </Menu.Item>
-              <Menu.Divider />
-              <Menu.Item key="look">
-                <Icon type="eye-o" /> 查看
-              </Menu.Item>
-            </Menu>
-          }
-          trigger={['contextMenu']}
-          placement="bottomCenter"
-        >
-          <span style={{ fontSize: 16 }}>{data.name}</span>
-        </Dropdown>
-      );
-    };
-    const loop = data =>
-      data.map(item => {
-        if (item.children) {
-          return (
-            <TreeNode key={item.id} title={nodeMenu(item)}>
-              {loop(item.children)}
-            </TreeNode>
-          );
-        }
-        return (
-          <TreeNode
-            icon={<Icon type="smile-o" />}
-            key={item.levelCode}
-            title={<span>{item.name}</span>}
-          />
-        );
-      });
+
+    // const loop = data =>
+    //   data.map(item => {
+    //     console.log(item)
+    //     console.log(345)
+    //     if (item.children) {
+    //       return (
+    //         <TreeNode key={item.value} title={item.title}>
+    //           {loop(item.children)}
+    //         </TreeNode>
+    //       );
+    //     }
+    //     return (
+    //       <TreeNode
+    //         icon={<Icon type="smile-o" />}
+    //         key={item.value}
+    //         title={<span>{item.title}</span>}
+    //       />
+    //     );
+    //   });
     return (
       <Card bordered={false} className={styles.card}>
         <div style={{ background: '#ECECEC', padding: '20px' }}>
@@ -219,7 +136,7 @@ class dept extends React.PureComponent {
                 className={styles.card}
               >
                 <div style={{ minHeight: 680, overflowY: 'auto', maxHeight: 380 }}>
-                  {treeData.length ? (
+                  {treeData ? (
                     <Tree
                       showLine
                       onSelect={this.onSelect}
@@ -231,9 +148,8 @@ class dept extends React.PureComponent {
                       }
                       expandedKeys={expandedKeys}
                       autoExpandParent={autoExpandParent}
-                    >
-                      {treeData ? loop(treeData) : '暂无数据'}
-                    </Tree>
+                      treeData={treeData}
+                    />
                   ) : (
                     'loading tree'
                   )}
@@ -252,26 +168,11 @@ class dept extends React.PureComponent {
                     <Description term="组织名称">
                       <Tag color="purple">{formData.name || '暂无'}</Tag>
                     </Description>
-                    <Description term="组织类型">
-                      <Tag color="geekblue">{orgType[formData.orgType] || '暂无'}</Tag>
-                    </Description>
                     <Description term="组织编码">
                       <Tag color="blue">{formData.code || '暂无'}</Tag>
                     </Description>
                     <Description term="层级编码">
                       <Tag color="lime">{formData.levelCode || '暂无'}</Tag>
-                    </Description>
-                    <Description term="关联品牌">
-                      {formData.brandIds &&
-                        formData.brandIds.map((item, index) => (
-                          <Tag
-                            style={{ marginBottom: 10 }}
-                            key={item}
-                            color={tagColors[10 - index]}
-                          >
-                            {select.find(d => d.value === item).label}
-                          </Tag>
-                        ))}
                     </Description>
                     <Description term="组织简介">{formData.remark || '暂无'}</Description>
                   </DescriptionList>

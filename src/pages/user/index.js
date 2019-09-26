@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import { connect } from 'dva';
 import PropTypes from 'prop-types';
 import {
@@ -342,7 +342,7 @@ class user extends PureComponent {
         require: true,
       },
       {
-        type: 'multiSelect',
+        type: 'treeSelect',
         title: '所属角色',
         key: 'roleId',
         require: true,
@@ -502,64 +502,68 @@ class user extends PureComponent {
       selectedRows: this.state.selectedRowKeys,
     };
     return (
-      <Card bordered={false} className={styles.card}>
-        <div className={styles.tableListForm}>{this.renderForm()}</div>
-        <div className={styles.tableList}>
-          <div className={styles.tableListOperator}>
-            <Button
-              icon="plus"
-              type="primary"
-              htmlType="submit"
-              className="ant-btn ant-btn-primary"
-              onClick={() => this.setState({ visible: true })}
-            >
-              新增
-            </Button>
-
-            {this.state.selectedRowKeys.length > 0 ? (
-              <Popconfirm
-                title="是否确认删除所选用户？"
-                onConfirm={() => this.handleBatchesDelete(this.state.selectedRowKeys)}
+      <Fragment>
+        <div>
+        <Card bordered={false} className={styles.card}>
+          <div className={styles.tableListForm}>{this.renderForm()}</div>
+          <div className={styles.tableList}>
+            <div className={styles.tableListOperator}>
+              <Button
+                icon="plus"
+                type="primary"
+                htmlType="submit"
+                className="ant-btn ant-btn-primary"
+                onClick={() => this.setState({ visible: true })}
               >
-                <Button type="danger" htmlType="submit">
-                  批量删除
-                </Button>
-              </Popconfirm>
-            ) : null}
+                新增
+              </Button>
+
+              {this.state.selectedRowKeys.length > 0 ? (
+                <Popconfirm
+                  title="是否确认删除所选用户？"
+                  onConfirm={() => this.handleBatchesDelete(this.state.selectedRowKeys)}
+                >
+                  <Button type="danger" htmlType="submit">
+                    批量删除
+                  </Button>
+                </Popconfirm>
+              ) : null}
+            </div>
+            <Table
+              tableProps={tableProps}
+              dispatch={dispatch}
+              fetchUrl="user/fetch"
+              formValues={this.state.formValues}
+              filterChange={formValues => this.setState({ formValues })}
+            />
+            <ModalForm
+              modalId="user_new"
+              changeVisible={() => this.setState({ visible: false, formData: {} })}
+              formItems={formItems}
+              visible={this.state.visible}
+              formData={this.state.formData}
+              updateUrl="/user/edit"
+              addUrl="/user/add"
+              dispatch={dispatch}
+              selectArrList={['roleId']}
+              callBackFetch={() => dispatch({ type: 'user/fetch', payload: this.state.formValues })}
+            />
+            <Active
+              dispatch={dispatch}
+              visible={activeVisible}
+              id={this.state.activeId}
+              changeVisible={() => this.setState({ activeVisible: false })}
+            />
+            <UserDetailModal
+              changeVisible={() => this.setState({ detailVisible: false })}
+              visible={this.state.detailVisible}
+              detailModelData={this.state.detailModelData}
+              dispatch={dispatch}
+            />
           </div>
-          <Table
-            tableProps={tableProps}
-            dispatch={dispatch}
-            fetchUrl="user/fetch"
-            formValues={this.state.formValues}
-            filterChange={formValues => this.setState({ formValues })}
-          />
-          <ModalForm
-            modalId="user_new"
-            changeVisible={() => this.setState({ visible: false, formData: {} })}
-            formItems={formItems}
-            visible={this.state.visible}
-            formData={this.state.formData}
-            updateUrl="/user/edit"
-            addUrl="/user/add"
-            dispatch={dispatch}
-            selectArrList={['roleId']}
-            callBackFetch={() => dispatch({ type: 'user/fetch', payload: this.state.formValues })}
-          />
-          <Active
-            dispatch={dispatch}
-            visible={activeVisible}
-            id={this.state.activeId}
-            changeVisible={() => this.setState({ activeVisible: false })}
-          />
-          <UserDetailModal
-            changeVisible={() => this.setState({ detailVisible: false })}
-            visible={this.state.detailVisible}
-            detailModelData={this.state.detailModelData}
-            dispatch={dispatch}
-          />
+        </Card>
         </div>
-      </Card>
+      </Fragment>
     );
   }
 }

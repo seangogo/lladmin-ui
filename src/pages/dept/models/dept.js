@@ -12,7 +12,7 @@ export default {
       const response = yield call(tree, payload);
       yield put({
         type: 'save',
-        payload: { treeData: [response.data] },
+        payload: { treeData: response.data },
       });
     },
     *checkCode({ payload, callback }, { call, _ }) {

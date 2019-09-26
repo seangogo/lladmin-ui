@@ -290,7 +290,7 @@ class BasicLayout extends React.PureComponent {
             {...this.props}
           />
           <Content style={this.getContentStyle()}>
-            {loading === false && (
+
                 <AnimatedSwitch>
                   <Route exact path="/home" component={Home} />
                   <Route exact path="/userInfo" component={Info} />
@@ -300,7 +300,6 @@ class BasicLayout extends React.PureComponent {
                   {dynamicRoute(children)}
                   <Route component={E404} />
                 </AnimatedSwitch>
-            )}
           </Content>
           <Footer />
         </Layout>

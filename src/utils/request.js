@@ -38,7 +38,7 @@ function checkStatus(response) {
     });
     removeToken();
     routerRedux.push('/guest/login');
-    return;
+    return false;
   }
   if (response.status >= 200 && response.status <= 300) {
     return response;
