@@ -1,122 +1,103 @@
 @import '~antd/lib/style/themes/default.less';
-@import '~@/utils/utils.less';
 
-.row {
-  .leftCard {
+//最顶层
+.top {
+  display: flex;
+  justify-content: space-between;
+  //overflow-y: auto;
+  height: calc(~'100vh - 144px');
+}
+//左边树菜单
+.left {
+  //overflow-x: hidden;
+  width: 25%;
+  background-color: #fff;
+  padding: 24px;
+  & > span {
+    &:first-child {
+      margin-bottom: 24px;
+    }
+  }
+}
+//右边卡片结构
+.card {
+  width: calc(75% - 24px);
+  :global {
+    .ompIcon {
+      font-size: 30px;
+      line-height: 48px;
+      margin-right: 0;
+    }
+    .ant-card-head-title {
+      overflow: visible;
+    }
+    .ant-avatar-lg {
+      width: 48px;
+      height: 48px;
+      line-height: 48px;
+    }
+    .ant-tag {
+      font-size: 14px;
+      height: 24px;
+      line-height: 24px;
+    }
+  }
+  .list {
     overflow-x: hidden;
-    height: 100%;
-    :global {
-      .ant-dropdown-menu-item {
-        padding: 0 12px;
-      }
-      .ant-card-body {
-        @media screen and (max-width: 1440px) {
-          height: 540px;
-        }
-        height: 720px;
-      }
-    }
-    .menus {
-      margin-left: 110px;
-      margin-top: 8px;
-      border: 2px solid #2eabff;
-    }
-    .MENU {
-      color: #000;
-      font-weight: 600;
-    }
-    .ROUTE {
-      color: #150303;
-    }
-    .BUTTON {
-      color: #02020a;
-    }
+    height: calc(~'100vh - 297px');
   }
-  .centerCards {
-    :global {
-      .ant-card {
-        margin-bottom: 10px;
-      }
-      .ompIcon {
-        font-size: 30px;
-        line-height: 48px;
-        margin-right: 0;
-      }
+}
+
+.MENU {
+  background: -webkit-linear-gradient(
+    left,
+    #1fe0ad,
+    #cff,
+    #1bd8b6,
+    #1bd8b6,
+    #1bd8b6,
+    #cff,
+    #0dbfd3
+  );
+}
+.ROUTE {
+  background: -webkit-linear-gradient(
+    left,
+    #00bfff,
+    #cff,
+    #1e90ff,
+    #1e90ff,
+    #1e90ff,
+    #cff,
+    #00bfff
+  );
+}
+.BUTTON {
+  background: -webkit-linear-gradient(
+    left,
+    #c9abff,
+    #cff,
+    #a995ff,
+    #c9abff,
+    #a291ff,
+    #cff,
+    #a291ff
+  );
+}
+.listContent {
+  .listContentItem {
+    color: @text-color-secondary;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: @font-size-base;
+    margin-left: 40px;
+    > span {
+      line-height: 20px;
     }
-    .listCard {
-      @media screen and (max-width: 1440px) {
-        height: 540px;
-      }
-      height: 720px;
-      overflow-x: hidden;
-      :global {
-        .ant-avatar-lg {
-          width: 48px;
-          height: 48px;
-          line-height: 48px;
-        }
-        .ant-tag {
-          font-size: 14px;
-          height: 24px;
-          line-height: 24px;
-        }
-      }
-      .MENU {
-        background: -webkit-linear-gradient(
-          left,
-          #1fe0ad,
-          #cff,
-          #1bd8b6,
-          #1bd8b6,
-          #1bd8b6,
-          #cff,
-          #0dbfd3
-        );
-      }
-      .ROUTE {
-        background: -webkit-linear-gradient(
-          left,
-          #00bfff,
-          #cff,
-          #1e90ff,
-          #1e90ff,
-          #1e90ff,
-          #cff,
-          #00bfff
-        );
-      }
-      .BUTTON {
-        background: -webkit-linear-gradient(
-          left,
-          #c9abff,
-          #cff,
-          #a995ff,
-          #c9abff,
-          #a291ff,
-          #cff,
-          #a291ff
-        );
-      }
-    }
-  }
-  .listContent {
-    .listContentItem {
-      color: @text-color-secondary;
-      display: inline-block;
-      vertical-align: middle;
-      font-size: @font-size-base;
-      margin-left: 40px;
-      > span {
-        line-height: 20px;
-      }
-      > p {
-        margin-top: 4px;
-        margin-bottom: 0;
-        line-height: 22px;
-      }
-      //&:first-child {
-      //  margin-left: 0;
-      //}
+    > p {
+      margin-top: 4px;
+      margin-bottom: 0;
+      line-height: 22px;
     }
   }
 }
@@ -174,13 +155,6 @@
       margin-left: 0;
       & > div {
         margin-left: 0;
-      }
-    }
-    .listCard {
-      :global {
-        .ant-card-head-title {
-          overflow: visible;
-        }
       }
     }
   }
@@ -250,7 +224,7 @@
   }
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: @screen-xl) {
   .centerCards {
     .listContent {
       text-align: right;

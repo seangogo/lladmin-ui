@@ -3,7 +3,6 @@ import {
   Avatar,
   Button,
   Card,
-  Col,
   Dropdown,
   Icon,
   Input,
@@ -11,7 +10,6 @@ import {
   Menu,
   Radio,
   Modal,
-  Row,
   Skeleton,
   Tree,
   Tag,
@@ -149,13 +147,13 @@ class resource extends PureComponent {
         const afterStr = item.name.substr(index + searchValue.length);
         const title =
           index > -1 ? (
-            <span className={styles[item.type]}>
+            <span>
               {beforeStr}
               <span style={{ color: '#f50' }}>{searchValue}</span>
               {afterStr}
             </span>
           ) : (
-            <span className={styles[item.type]}>{item.name}</span>
+            <span>{item.name}</span>
           );
         if (item.children) {
           return (
@@ -164,7 +162,7 @@ class resource extends PureComponent {
             </TreeNode>
           );
         }
-        return <TreeNode key={item.id} title={title} levelCode={item.levelCode} />;
+        return <TreeNode key={item.id} title={title} levelCode={item.levelCode}/>;
       });
     loopTreeNode([root], ['name', 'id']);
     const formItems = [
@@ -294,89 +292,84 @@ class resource extends PureComponent {
       </RadioGroup>
     );
     return (
-      <Fragment>
-        <Row gutter={{ md: 2, lg: 6, xl: 12 }} className={styles.row}>
-          <Col xl={6} lg={10} md={12} sm={24} xs={24}>
-            <Card bordered={false} className={styles.leftCard}>
-              <Search placeholder="Search" onChange={this.searchChange} />
-              {
-                <Skeleton loading={loading} active>
-                  <DirectoryTree
-                    showIcon
-                    expandedKeys={expandedKeys}
-                    expandAction="doubleClick"
-                    onSelect={this.onSelect}
-                    autoExpandParent={autoExpandParent}
-                    onExpand={keys =>
-                      this.setState({
-                        expandedKeys: keys,
-                        autoExpandParent: false,
-                      })
-                    }
-                  >
-                    {loop(root.children)}
-                  </DirectoryTree>
-                </Skeleton>
-              }
-            </Card>
-          </Col>
-          <Col xl={18} lg={10} md={12} sm={24} xs={24} className={styles.centerCards}>
-            <Card
-              className={styles.listCard}
-              bordered={false}
-              title="资源列表"
-              extra={extraContent}
-            >
-              <Button
-                type="dashed"
-                style={{ width: '100%', marginBottom: 8 }}
-                icon="plus"
-                onClick={() =>
-                  this.handleSetState({
-                    modalVisible: true,
-                    formData: { parentId: root.id },
+      <div className={styles.top}>
+        <div className={styles.left}>
+          <Search placeholder="Search" onChange={this.searchChange} />
+          {
+            <Skeleton loading={loading} active>
+              <DirectoryTree
+                showIcon
+                expandedKeys={expandedKeys}
+                expandAction="doubleClick"
+                onSelect={this.onSelect}
+                autoExpandParent={autoExpandParent}
+                onExpand={keys =>
+                  this.setState({
+                    expandedKeys: keys,
+                    autoExpandParent: false,
                   })
                 }
               >
-                添加
-              </Button>
-              <List
-                size="large"
-                rowKey="id"
-                loading={loading}
-                dataSource={selectedType === '' ? list : list.filter(d => d.type === selectedType)}
-                renderItem={item => (
-                  <List.Item
-                    actions={[
-                      <a
-                        onClick={e => {
-                          e.preventDefault();
-                          this.handleSetState({
-                            modalVisible: true,
-                            formData: { parentId: item.id },
-                          });
-                        }}
-                      >
-                        添加
-                      </a>,
-                      <MoreBtn current={item} />,
-                    ]}
+                {loop(root.children)}
+              </DirectoryTree>
+            </Skeleton>
+          }
+        </div>
+        <Card
+          className={styles.card}
+          bordered={false}
+          title="资源列表"
+          extra={extraContent}
+        >
+          <Button
+            type="dashed"
+            style={{ width: '100%', marginBottom: 8 }}
+            icon="plus"
+            onClick={() =>
+              this.handleSetState({
+                modalVisible: true,
+                formData: { parentId: root.id },
+              })
+            }
+          >
+            添加
+          </Button>
+          <List
+            className={styles.list}
+            size="large"
+            rowKey="id"
+            loading={loading}
+            dataSource={selectedType === '' ? list : list.filter(d => d.type === selectedType)}
+            renderItem={item => (
+              <List.Item
+                actions={[
+                  <a
+                    onClick={e => {
+                      e.preventDefault();
+                      this.handleSetState({
+                        modalVisible: true,
+                        formData: { parentId: item.id },
+                      });
+                    }}
                   >
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar shape="square" size="large" className={styles[item.type]}>
-                          <OmpIcon type={item.icon} />
-                        </Avatar>
-                      }
-                      title={<a href={item.href}>{item.title}</a>}
-                      description={item.remark}
-                    />
-                    <ListContent data={item} />
-                  </List.Item>
-                )}
-              />
-            </Card>
-          </Col>
+                    添加
+                  </a>,
+                  <MoreBtn current={item} />,
+                ]}
+              >
+                <List.Item.Meta
+                  avatar={
+                    <Avatar shape="square" size="large" className={styles[item.type]}>
+                      <OmpIcon type={item.icon} />
+                    </Avatar>
+                  }
+                  title={<a href={item.href}>{item.title}</a>}
+                  description={item.remark}
+                />
+                <ListContent data={item} />
+              </List.Item>
+            )}
+          />
           <ModalForm
             changeVisible={() => this.setState({ modalVisible: false, formData: {} })}
             formItems={formItems}
@@ -393,9 +386,10 @@ class resource extends PureComponent {
             checkIcon={this.handleCheckIcon}
             setPropsState={this.handleSetState}
           />
-        </Row>
-      </Fragment>
+        </Card>
+      </div>
     );
   }
 }
+
 export default resource;

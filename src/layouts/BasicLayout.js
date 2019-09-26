@@ -222,7 +222,7 @@ class BasicLayout extends React.PureComponent {
     return {
       margin: '24px 24px 0',
       paddingTop: fixedHeader ? 64 : 0,
-      position: 'relative'
+      position: 'relative',
     };
   };
 
@@ -290,16 +290,17 @@ class BasicLayout extends React.PureComponent {
             {...this.props}
           />
           <Content style={this.getContentStyle()}>
-
-                <AnimatedSwitch>
-                  <Route exact path="/home" component={Home} />
-                  <Route exact path="/userInfo" component={Info} />
-                  <Route exact path="/userCenter" component={Center} />
-                  <Route exact path="/exception403" component={E403} />
-                  <Route exact path="/exception405" component={E500} />
-                  {dynamicRoute(children)}
-                  <Route component={E404} />
-                </AnimatedSwitch>
+            {loading === false && (
+              <AnimatedSwitch>
+                <Route exact path="/home" component={Home} />
+                <Route exact path="/userInfo" component={Info} />
+                <Route exact path="/userCenter" component={Center} />
+                <Route exact path="/exception403" component={E403} />
+                <Route exact path="/exception405" component={E500} />
+                {dynamicRoute(children)}
+                <Route component={E404} />
+              </AnimatedSwitch>
+            )}
           </Content>
           <Footer />
         </Layout>
